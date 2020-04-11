@@ -1,0 +1,80 @@
+###########题目描述#############
+
+n 皇后问题研究的是如何将 n 个皇后放置在 n×n 的棋盘上，并且使皇后彼此之间不能相互攻击。
+
+给定一个整数 n，返回所有不同的 n 皇后问题的解决方案。
+
+每一种解法包含一个明确的 n 皇后问题的棋子放置方案，该方案中 'Q' 和 '.' 分别代表了皇后和空位。
+
+示例:
+
+输入: 4
+输出: [
+ [".Q..",  // 解法 1
+  "...Q",
+  "Q...",
+  "..Q."],
+
+ ["..Q.",  // 解法 2
+  "Q...",
+  "...Q",
+  ".Q.."]
+]
+解释: 4 皇后问题存在两个不同的解法。
+
+#############代码#################
+
+class Solution(object):
+    def solveNQueens(self, n):
+        """
+        :type n: int
+        :rtype: List[List[str]]
+        """
+        if n <= 0:
+            return []
+        res = set()
+        
+        def find_pos(row_index, queue, n):
+            #对于每一行判断任一列是否可行
+            for i in range(n):
+                #假如可行的话
+                if pos_available(row_index, i, queue):
+                    #设置皇后位置
+                    queue[row_index] = i
+                    #假如是最后一行
+                    if row_index == n-1:
+                        res.add(tuple(queue))
+                        return
+                    else:
+                        #不是最后一行，则递归
+                        find_pos(row_index+1, queue, n)
+        def pos_available(row, col, queue):
+            for i in range(row):
+                #判断列是否相同
+                if queue[i] == col:
+                    return False
+                #判断是否在同一对角线（正或者斜）
+                if abs(queue[i]-col) == abs(i-row):
+                    return False
+            return True
+        #规范输出
+        def plot_queue(queue, n):
+            out = []
+            for i in range(n):
+                tmp = '.' * queue[i] + 'Q' + '.' * (n-1-queue[i])
+                out.append(tmp)
+            return out
+
+        #初始化皇后位置，数值不重要
+        queue = [-1 for _ in range(n)]
+        #从0行开始找
+        find_pos(0, queue, n)
+        #规范输出
+        out = []
+        for t in res:
+            out.append(plot_queue(t, n))
+        return out
+
+
+
+
