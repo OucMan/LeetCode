@@ -1,0 +1,32 @@
+#################题目描述##################
+
+给定一个只包含数字的字符串，复原它并返回所有可能的 IP 地址格式。
+
+示例:
+
+输入: "25525511135"
+输出: ["255.255.11.135", "255.255.111.35"]
+
+#################代码#####################
+
+class Solution(object):
+    def restoreIpAddresses(self, s):
+        """
+        :type s: str
+        :rtype: List[str]
+        """
+        res = []
+        self.helper(s, [], res)
+        return res
+    
+    def helper(self, s, path, res):
+        if len(s) > (4-len(path))*3:
+            return
+        if not s and len(path) == 4:
+            res.append('.'.join(path))
+            return
+        for i in range(min(3, len(s))):
+            item = s[:i+1]
+            if item[0]=='0' and len(item)>1 or int(item)>255:
+                continue
+            self.helper(s[i+1:], path+[s[:i+1]], res)
