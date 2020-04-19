@@ -19,14 +19,16 @@ c[i,w] = max(vi + c[i-1, w-wi], c[i-1, w]) if i> 0 and w >= wi
 获得最优解
 
 def bag_01(weights, values, capicity):
+    weights.insert(0, 0)
+    values.insert(0, 0)
     n = len(values)
-    f = [[0 for j in range(capicity+1)] for i in range(n+1)]
-    for i in range(1, n+1):
+    f = [[0 for j in range(capicity+1)] for i in range(n)]
+    for i in range(1, n):
         for j in range(1, capicity+1):
-            if weights[i-1] > j:
+            if weights[i] > j:
                 f[i][j] = f[i-1][j]
             else:
-                f[i][j] = max(f[i-1][j-weights[i-1]] + values[i-1], f[i-1][j])
+                f[i][j] = max(f[i-1][j-weights[i]] + values[i], f[i-1][j])
     return f[-1][-1]
     
 打印出最优方案
@@ -46,4 +48,17 @@ def show(capicity, weights, f):
             print("第{}个".format(i+1))
 
 
+###################空间优化##########################
+f[i][w]是由 f[i-1][w]和 f[i-1][w-c[i]]两个子问题递推而来，即第i行仅和第i-1行有关，因此可以将f数组从两维变成一维。为了在第i次遍历的时候，使得f[w-c[i]]为f[i-1][w-c[i]]，我们对于质量需要从最大向最小遍历。
+
+def bag_02(weights, values, capicity):
+    weights.insert(0, 0)
+    values.insert(0, 0)
+    n = len(values)
+    f = [0 for j in range(capicity+1)]
+    for i in range(1, n):
+        for j in range(1, capicity+1):
+            if weights[i] <= j:
+                f[j] = max(f[j-weights[i]] + values[i], f[j])
+    return f[-1]
 
