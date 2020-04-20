@@ -57,7 +57,7 @@ def bag_02(weights, values, capicity):
     n = len(values)
     f = [0 for j in range(capicity+1)]
     for i in range(1, n):
-        for j in range(1, capicity+1):
+        for j in range(capicity, 0, -1):
             if weights[i] <= j:
                 f[j] = max(f[j-weights[i]] + values[i], f[j])
     return f[-1]
