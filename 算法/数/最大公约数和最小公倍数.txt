@@ -1,0 +1,59 @@
+############最大公约数##############
+
+辗转相除法：两个正整数a和b（a>b），它们的最大公约数等于a除以b的余数c和b之间的最大公约数。比如10和25，25除以10商2余5,那么10和25的最大公约数，等同于10和5的最大公约数。
+
+def gcd(a, b):
+    if b == 0:
+        return a
+    else:
+        return gcd(b, a % b)
+
+更相减损术：两个正整数a和b（a>b），它们的最大公约数等于a-b的差值c和较小数b的最大公约数。比如10和25，25减去10的差是15,那么10和25的最大公约数，等同于10和15的最大公约数。
+
+def gcd(a, b):
+    if b > a:
+        return gcd(b, a)
+    if a % b == 0:
+        return b
+    return gcd(a-b, b)
+    
+##############最小公倍数#############
+
+最小公倍数为两数的乘积除以最大公约数。
+
+def lcm(a, b):
+    return a*b / gcd(a,b)
+
+############使用位运算来求最大公约数##########
+
+对于 a 和 b 的最大公约数 f(a, b)，有：
+
+如果 a 和 b 均为偶数，f(a, b) = 2*f(a/2, b/2);
+如果 a 是偶数 b 是奇数，f(a, b) = f(a/2, b);
+如果 b 是偶数 a 是奇数，f(a, b) = f(a, b/2);
+如果 a 和 b 均为奇数，f(a, b) = f(b, a-b);
+
+乘 2 和除 2 都可以转换为移位操作。
+
+def gcd(a, b):
+    if b > a:
+        return gcd(b, a)
+    if b == 0:
+        return a
+    tmpA = isEven(a)
+    tmpB = isEven(b)
+    if tmpA and tmpB:
+        return 2 * gcd(a>>1, b>>1)
+    elif tmpA and not tmpB:
+        return gcd(a>>1, b)
+    elif not tmpA and tmpB:
+        return gcd(a, b>>1)
+    else:
+        return gcd(a-b, b)
+
+def isEven(a):
+    if a & 1 == 0:
+        return True
+    else:
+        return False
+        
