@@ -1,0 +1,74 @@
+##################题目描述#######################
+
+给定一个二叉树，返回它的 前序 遍历。
+
+ 示例:
+
+输入: [1,null,2,3]  
+   1
+    \
+     2
+    /
+   3 
+
+输出: [1,2,3]
+
+#################递归######################
+
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution(object):
+    def preorderTraversal(self, root):
+        """
+        :type root: TreeNode
+        :rtype: List[int]
+        """
+        if not root:
+            return []
+        res = []
+        self.helper(root, res)
+        return res
+    
+    def helper(self, root, res):
+        if not root:
+            return
+        res.append(root.val)
+        self.helper(root.left, res)
+        self.helper(root.right, res)
+
+#####################非递归######################
+
+
+使用栈，先放右，再放左
+
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution(object):
+    def preorderTraversal(self, root):
+        """
+        :type root: TreeNode
+        :rtype: List[int]
+        """
+        if not root:
+            return []
+        
+        stack = [root]
+        res = []
+        while stack:
+            tmp = stack.pop()
+            res.append(tmp.val)
+            if tmp.right:
+                stack.append(tmp.right)
+            if tmp.left:
+                stack.append(tmp.left)
+        return res
