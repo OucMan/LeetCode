@@ -1,0 +1,74 @@
+#############题目描述##############
+
+给定一个二叉树，返回它的 后序 遍历。
+
+示例:
+
+输入: [1,null,2,3]  
+   1
+    \
+     2
+    /
+   3 
+
+输出: [3,2,1]
+
+#############递归#################
+
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution(object):
+    def postorderTraversal(self, root):
+        """
+        :type root: TreeNode
+        :rtype: List[int]
+        """
+        if not root:
+            return []
+        res = []
+        self.helper(root, res)
+        return res
+    
+    def helper(self, root, res):
+        if not root:
+            return 
+        self.helper(root.left, res)
+        self.helper(root.right, res)
+        res.append(root.val)
+
+
+##################非递归####################
+
+前序为root->left->right，后序为left->right->root, 因此当我们把前序变成root->right->left，然后将结果求逆序，就是结果。
+
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution(object):
+    def postorderTraversal(self, root):
+        """
+        :type root: TreeNode
+        :rtype: List[int]
+        """
+        if not root:
+            return []
+        stack = [root]
+        res = []
+        while stack:
+            tmp = stack.pop()
+            res.append(tmp.val)
+            if tmp.left:
+                stack.append(tmp.left)
+            if tmp.right:
+                stack.append(tmp.right)
+        res.reverse()
+        return res
