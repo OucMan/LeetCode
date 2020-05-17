@@ -66,4 +66,30 @@ class Solution(object):
                     nextLayer = []
         
 
+#########################################
 
+还有一个简单的方法，每次入队列时，首先将右节点入队列，这样最后的一个节点就是最后一行的最左节点
+
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution(object):
+    def findBottomLeftValue(self, root):
+        """
+        :type root: TreeNode
+        :rtype: int
+        """
+        queue = [root]
+        tmp = None
+        while queue:
+            tmp = queue.pop(0)
+            if tmp.right:
+                queue.append(tmp.right)
+            if tmp.left:
+                queue.append(tmp.left)
+        return tmp.val
+        
