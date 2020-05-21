@@ -1,0 +1,69 @@
+##############题目描述################
+
+给定一个 n x n 矩阵，其中每行和每列元素均按升序排序，找到矩阵中第k小的元素。
+请注意，它是排序后的第 k 小元素，而不是第 k 个不同的元素。
+
+ 
+
+示例:
+
+matrix = [
+   [ 1,  5,  9],
+   [10, 11, 13],
+   [12, 13, 15]
+],
+k = 8,
+
+返回 13。
+ 
+
+提示：
+你可以假设 k 的值永远是有效的, 1 ≤ k ≤ n2 。
+
+#############代码1####################
+
+######排序
+
+class Solution(object):
+    def kthSmallest(self, matrix, k):
+        """
+        :type matrix: List[List[int]]
+        :type k: int
+        :rtype: int
+        """
+        data = []
+        for num in matrix:
+            data = data + num
+        data.sort()
+        return data[k-1]
+        
+###############代码2###################
+
+###################二分查找
+
+class Solution(object):
+    def kthSmallest(self, matrix, k):
+        """
+        :type matrix: List[List[int]]
+        :type k: int
+        :rtype: int
+        """
+        
+        rows = len(matrix)
+        cols = len(matrix[0])
+        l, r = matrix[0][0], matrix[-1][-1]
+        
+        while l < r:
+            mid = l + (r-l)//2
+            count = 0
+            for i in range(rows):
+                j = cols-1
+                while j >=0 and matrix[i][j] > mid:
+                    j = j-1
+                count = count + j + 1
+            if count >= k:
+                r = mid
+            else:
+                l = mid + 1
+        return l
+
