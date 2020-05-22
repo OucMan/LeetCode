@@ -1,0 +1,45 @@
+###############题目描述##############
+
+写一个函数，求两个整数之和，要求在函数体内不得使用+、-、*、/四则运算符号。
+
+
+#################思路#################
+
+思路1：使用python中的sum函数
+
+思路2：转成二进制，使用异或表示不带进位的和，使用与运算加左移得出出现进位的位置，两者上述运算，直到不存在进位位置。
+
+################代码###################
+
+思路1
+class Solution:
+    def Add(self, num1, num2):
+        # write code here
+        return sum([num1, num2])
+           
+思路2
+
+注： 与 0xFFFFFFFF是为了控制数的边界为32位
+
+正数的补码第一位为0，负数的补码第一位为1，所以两者的边界是0x7FFFFFFF
+
+负数求补码的过程：对应的正数二进制减1，取反。
+
+补码求负数：对应的补码取反（包括符号位），加1，前面加上负号
+
+~(n) = -(n+1)
+
+class Solution:
+    def Add(self, num1, num2):
+        # write code here
+        while num2:
+            temp = (num1^num2) & 0xFFFFFFFF
+            num2 = ((num1&num2)<<1) & 0xFFFFFFFF
+            num1 = temp
+        if num1 <= 0x7FFFFFFF:
+            return num1
+        else:
+            //num1为补码，num1^0xFFFFFFFF相当于补码取反，根据~n为-(n+1)，下面的式子为补码的反码加1后前面在加上符号，即为补码恢复负数的过程
+            //补码取反不用直接用~num1的原因是，~不会对符号位取反，因此需要异或0xFFFFFFFF
+            return ~(num1^0xFFFFFFFF)
+            
