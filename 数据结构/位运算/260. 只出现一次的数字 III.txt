@@ -26,4 +26,30 @@ class Solution(object):
         
  ##################根据异或####################
  
+如果将所有的数字都xor 一遍，那结果是什么呢。假设只出现一次的两个数是 A、B，那我们最后只能得到一个值 = A xor B，但没有办法知道 A 是多少，B 是多少。
+xor 是按位比较，相同为0，不同为1，也就是说得到的这个值里，所有的1都代表了：在这个位置上，A 和 B 是不同的，这给我们区分 A B 提供了一个方法：
+我们找一个是1的位置（也就是 A和B 在这个位置上的值反正有一个是0 有一个是1），再次遍历一遍数组，按照这个位置上是0还是1分成两组，那么 A 和 B 一定会被分开。而对于其他的数字，无论他们在这个位置上是0还是1，总之他们会两两一对分到两个组中的任意一个组里去。
+这就转化成了初级版本的问题了，每个组中都只有一个数出现1次，对两个组分别做一次xor ，得到两个数就是 A 和 B
+
  
+from collections import Counter
+
+class Solution(object):
+    def singleNumber(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: List[int]
+        """
+        tmp = 0
+        res = [0,0]
+        for num in nums:
+            tmp = tmp ^ num
+        #找到1出现的最低位
+        tmp = tmp & (-1*tmp)
+        for num in nums:
+            if tmp & num == 0:
+                res[0] = res[0] ^ num
+            else:
+                res[1] = res[1] ^ num
+        return res
+
