@@ -1,0 +1,39 @@
+#################题目描述################
+
+假设有打乱顺序的一群人站成一个队列。 每个人由一个整数对(h, k)表示，其中h是这个人的身高，k是排在这个人前面且身高大于或等于h的人数。 编写一个算法来重建这个队列。
+
+注意：
+总人数少于1100人。
+
+示例
+
+输入:
+[[7,0], [4,4], [7,1], [5,0], [6,1], [5,2]]
+
+输出:
+[[5,0], [7,0], [5,2], [6,1], [4,4], [7,1]]
+
+###############思路#######################
+
+优先排个子高的，因为个子矮的不会影响个子高的位置，相同高度的优先排k小的（前面的）
+
+##################代码#################
+
+class Solution(object):
+    def reconstructQueue(self, people):
+        """
+        :type people: List[List[int]]
+        :rtype: List[List[int]]
+        """
+        people.sort(cmp=self.mycmp)
+        res = [[] for _ in range(len(people))]
+        for item in people:
+            res.insert(item[1], item)
+        return res[:len(people)]
+
+    def mycmp(self, a, b):
+        if (a[0] > b[0]) or (a[0]==b[0] and a[1] < b[1]):
+            return -1
+        else:
+            return 1
+            
