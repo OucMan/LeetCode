@@ -15,3 +15,28 @@ Example:
 解释:
 对于该样例，我们可以在x = 6（射爆[2,8],[1,6]两个气球）和 x = 11（射爆另外两个气球）。
 
+###############代码###################
+
+class Solution(object):
+    def findMinArrowShots(self, points):
+        """
+        :type points: List[List[int]]
+        :rtype: int
+        """
+        if len(points) <= 1:
+            return len(points)
+
+        points.sort(cmp=self.mycmp)
+        cur = points[0]
+        res = 1
+        for item in points[1:]:
+            if cur[1] < item[0]:
+                res += 1
+                cur = item
+        return res
+    
+    def mycmp(self, a, b):
+        if a[1] > b[1] or (a[1]==b[1] and a[0] > b[0]):
+            return 1
+        else:
+            return -1
