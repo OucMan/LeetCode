@@ -29,3 +29,36 @@ class Solution(object):
             return None
         nums.sort()
         return nums[-k]
+        
+######################快速思想，找到数组中元素的位置，当分界点的索引为ｋ－１的时候，它就是第ｋ大元素
+
+class Solution(object):
+    def findKthLargest(self, nums, k):
+        """
+        :type nums: List[int]
+        :type k: int
+        :rtype: int
+        """
+        if not nums or len(nums) < k:
+            return None
+        left = 0
+        right = len(nums)-1
+        while left <= right:
+            index = self.partition(nums, left, right)
+            if index == k-1:
+                return nums[index]
+            elif index > k-1:
+                right = index - 1
+            else:
+                left = index + 1
+    
+    def partition(self, nums, left, right):
+        tmp = nums[right]
+        start = left
+        for i in range(left, right):
+            if nums[i] >= tmp:
+                nums[i], nums[start] = nums[start], nums[i]
+                start += 1
+        nums[start], nums[right] = nums[right], nums[start]
+        return start
+
