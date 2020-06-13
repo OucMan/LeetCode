@@ -1,0 +1,60 @@
+#################代码#################
+
+实现一个二叉搜索树迭代器。你将使用二叉搜索树的根节点初始化迭代器。
+
+调用 next() 将返回二叉搜索树中的下一个最小的数。
+
+#################思路#################
+
+中序遍历二叉搜索树就是从小到大的序列
+
+#################代码##################
+
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class BSTIterator(object):
+
+    def __init__(self, root):
+        """
+        :type root: TreeNode
+        """
+        self.res = []
+        if root:
+            self.mid_bianli(root, self.res)
+        
+
+    def next(self):
+        """ 
+        @return the next smallest number
+        :rtype: int
+        """
+        if self.res:
+            return self.res.pop(0).val
+        else:
+            return None
+
+    def hasNext(self):
+        """
+        @return whether we have a next smallest number
+        :rtype: bool
+        """
+        return True if self.res else False
+    
+    def mid_bianli(self, root, res):
+        if not root:
+            return
+        self.mid_bianli(root.left, res)
+        res.append(root)
+        self.mid_bianli(root.right, res)
+
+
+
+# Your BSTIterator object will be instantiated and called as such:
+# obj = BSTIterator(root)
+# param_1 = obj.next()
+# param_2 = obj.hasNext()
