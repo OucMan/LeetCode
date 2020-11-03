@@ -19,11 +19,22 @@
 
 # 思路
 
+解法1
+
 递归解题，如果root为空，直接返回0，否则最终结果等于1（root）+左子树节点个数+右子树节点个数
 
 注：但是好像没有用到完全二叉树的特点
 
+解法2
+
+利用完全二叉树的特点
+
+完全二叉树的左子树高度大于等于右子树，当等于的时候，可以断定左子树是满的，当大于的时候，可以断定右子树的满的
+
+
 # 代码
+
+解法1
 
 # Definition for a binary tree node.
 # class TreeNode(object):
@@ -42,3 +53,36 @@ class Solution(object):
             return 0
         else:
             return 1 + self.countNodes(root.left) + self.countNodes(root.right)
+
+解法2
+
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution(object):
+    def countNodes(self, root):
+        """
+        :type root: TreeNode
+        :rtype: int
+        """
+        if not root:
+            return 0
+
+        l = self.getDepth(root.left)
+        r = self.getDepth(root.right)
+
+        if l == r:
+            return 2 ** l + self.countNodes(root.right)
+        else:
+            return self.countNodes(root.left) + 2 ** r
+
+    def getDepth(self, root):
+        res = 0
+        while root:
+            res += 1
+            root = root.left
+        return res
