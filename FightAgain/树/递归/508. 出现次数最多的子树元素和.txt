@@ -1,0 +1,65 @@
+# 题目
+
+给你一个二叉树的根结点，请你找出出现次数最多的子树元素和。一个结点的「子树元素和」定义为以该结点为根的二叉树上所有结点的元素之和（包括结点本身）。
+
+你需要返回出现次数最多的子树元素和。如果有多个元素出现的次数相同，返回所有出现次数最多的子树元素和（不限顺序）。
+
+示例 1：
+输入:
+
+  5
+ /  \
+2   -3
+返回 [2, -3, 4]，所有的值均只出现一次，以任意顺序返回所有值。
+
+示例 2：
+输入：
+
+  5
+ /  \
+2   -5
+返回 [2]，只有 2 出现两次，-5 只出现 1 次。
+
+提示： 假设任意子树元素和均可以用 32 位有符号整数表示。
+
+
+# 思路
+
+首先需要将所有子树的和保存起来，然后在其中找出出现次数最多的元素。问题在于如何获得全部子树的和，首先我们需要写出得到子树和的函数，在计算过程中将结果保存下来，为了得到所有子树的结果，我们只需要计算根为节点的整个树的和，在计算过程中，会递归保存下所有子树的元素和。
+
+# 代码
+
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+from collections import Counter
+
+class Solution(object):
+    def __init__(self):
+        self.db = []
+
+    def findFrequentTreeSum(self, root):
+        """
+        :type root: TreeNode
+        :rtype: List[int]
+        """
+        if not root:
+            return []
+        self.helper(root)
+        c = Counter(self.db)
+        m = c.most_common(1)[0][1]
+        return [x for x in c.keys() if c[x]==m]
+        
+    
+    def helper(self, root):
+        if not root:
+            return 0
+        l = self.helper(root.left)
+        r = self.helper(root.right)
+        self.db.append(l + r + root.val)
+        return l + r + root.val
+
