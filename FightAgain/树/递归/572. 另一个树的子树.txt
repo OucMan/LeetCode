@@ -1,0 +1,75 @@
+# 题目
+
+给定两个非空二叉树 s 和 t，检验 s 中是否包含和 t 具有相同结构和节点值的子树。s 的一个子树包括 s 的一个节点和这个节点的所有子孙。s 也可以看做它自身的一棵子树。
+
+示例 1:
+给定的树 s:
+
+     3
+    / \
+   4   5
+  / \
+ 1   2
+给定的树 t：
+
+   4 
+  / \
+ 1   2
+返回 true，因为 t 与 s 的一个子树拥有相同的结构和节点值。
+
+示例 2:
+给定的树 s：
+
+     3
+    / \
+   4   5
+  / \
+ 1   2
+    /
+   0
+给定的树 t：
+
+   4
+  / \
+ 1   2
+返回 false。
+
+# 思路
+
+整个问题可以拆解为三个子问题，t是s的子树，t是s的左子树的子树，t是s的右子树的子树，这三种情况满足一个便可判断t是s的子树
+
+然后关键的问题是如何判断一个树A是另一个树B的子树，如果A和B都是空，则返回True，假如一个为空，一个非空，则返回False，当都非空时，判断根节点的值的大小，不相等则直接返回False，相等的话再继续判断两个树的子树。
+
+# 代码
+
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution(object):
+    def isSubtree(self, s, t):
+        """
+        :type s: TreeNode
+        :type t: TreeNode
+        :rtype: bool
+        """
+        if not s and not t:
+            return True
+        if not s:
+            return False
+        return self.helper(s, t) or self.isSubtree(s.left, t) or self.isSubtree(s.right, t)
+    
+    def helper(self, s, t):
+        if not s and not t:
+            return True
+        elif s and t:
+            if s.val != t.val:
+                return False
+            else:
+                return self.helper(s.left, t.left) and self.helper(s.right, t.right)
+        else:
+            return False
+            
+        
