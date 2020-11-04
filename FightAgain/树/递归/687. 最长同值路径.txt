@@ -1,0 +1,73 @@
+# 题目
+
+给定一个二叉树，找到最长的路径，这个路径中的每个节点具有相同值。 这条路径可以经过也可以不经过根节点。
+
+注意：两个节点之间的路径长度由它们之间的边数表示。
+
+示例 1:
+
+输入:
+
+              5
+             / \
+            4   5
+           / \   \
+          1   1   5
+输出:
+
+2
+示例 2:
+
+输入:
+
+              1
+             / \
+            4   5
+           / \   \
+          4   4   5
+输出:
+
+2
+注意: 给定的二叉树不超过10000个结点。 树的高度不超过1000。
+
+# 思路
+
+首先定义一个全局变量记录结果，在一个树中，经过根节点的等值路径长度，等于左子树经过根节点的最长单向路径+右子树经过根节点的最长单向路径 + 2条边，前提是根节点和左子树和右子树的根节点相等。如果根节点和左右子树的根节点都不相等，那么返回0，表示经过该根节点向下没有符合条件的路径了。
+
+
+# 代码
+
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution(object):
+
+    def __init__(self):
+        self.res = 0
+
+    def longestUnivaluePath(self, root):
+        """
+        :type root: TreeNode
+        :rtype: int
+        """
+        if not root:
+            return 0
+        self.helper(root)
+        return self.res
+    
+    def helper(self, root):
+        if not root:
+            return 0
+        l = self.helper(root.left)
+        r = self.helper(root.right)
+        l_l, r_l = 0, 0
+        if root.left and root.val == root.left.val:
+            l_l = l + 1
+        if root.right and root.val == root.right.val:
+            r_l = r + 1
+        self.res = max(self.res, l_l + r_l)
+        return max(l_l, r_l)
+
