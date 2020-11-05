@@ -1,0 +1,40 @@
+# 题目
+
+给定一个二叉树，找出其最小深度。
+
+最小深度是从根节点到最近叶子节点的最短路径上的节点数量。
+
+说明：叶子节点是指没有子节点的节点。
+
+# 思路
+
+递归解法：树的最小深度等于左子树的最小深度和右子树的最小深度中的最小值加1，前提是左子树的最小深度和右子树的最小深度不为0
+
+# 代码
+
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution(object):
+    def minDepth(self, root):
+        """
+        :type root: TreeNode
+        :rtype: int
+        """
+        if not root:
+            return 0
+        
+        l = self.minDepth(root.left)
+        r = self.minDepth(root.right)
+
+        if l != 0 and r != 0:
+            return 1 + min(l, r)
+        elif l == 0 and r == 0:
+            return 1
+        else:
+            return 1 + l + r
+            
+            
