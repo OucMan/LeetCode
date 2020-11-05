@@ -1,0 +1,109 @@
+# 题目
+
+给定一个二叉树和一个目标和，找到所有从根节点到叶子节点路径总和等于给定目标和的路径。
+
+说明: 叶子节点是指没有子节点的节点。
+
+示例:
+给定如下二叉树，以及目标和 sum = 22，
+
+              5
+             / \
+            4   8
+           /   / \
+          11  13  4
+         /  \    / \
+        7    2  5   1
+返回:
+
+[
+   [5,4,11,2],
+   [5,8,4,5]
+]
+
+
+# 思路
+
+思路1
+
+层序遍历，队里中保存的元素是（节点，根到该节点的路径上所有节点之和）
+
+思路2
+
+深度优先搜索dps
+
+# 代码
+
+思路1
+
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution(object):
+    def pathSum(self, root, s):
+        """
+        :type root: TreeNode
+        :type s: int
+        :rtype: List[List[int]]
+        """
+        if not root:
+            return []
+        
+        queue = [(root, [root.val])]
+        res = []
+
+        while queue:
+            node = queue.pop(0)
+            if not node[0].left and not node[0].right:
+                if sum(node[1]) == s:
+                    res.append(node[1])
+            if node[0].left:
+                tmp = node[1] + [node[0].left.val]
+                queue.append((node[0].left, tmp))
+            if node[0].right:
+                tmp = node[1] + [node[0].right.val]
+                queue.append((node[0].right, tmp))
+        
+        return res
+
+思路2
+
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution(object):
+    
+    def __init__(self):
+        self.res = []
+
+    def pathSum(self, root, s):
+        """
+        :type root: TreeNode
+        :type s: int
+        :rtype: List[List[int]]
+        """
+        if not root:
+            return []
+        
+        self.helper(root, s, [])
+        return self.res
+    
+    def helper(self, root, s, path):
+        if not root:
+            return
+        if not root.left and not root.right and s == root.val:
+            path.append(root.val)
+            self.res.append(path)
+            return
+        self.helper(root.left, s-root.val, path+[root.val])
+        self.helper(root.right, s-root.val, path+[root.val])
+
+        
