@@ -1,0 +1,86 @@
+# 题目
+
+给定一个二叉树
+
+struct Node {
+  int val;
+  Node *left;
+  Node *right;
+  Node *next;
+}
+填充它的每个 next 指针，让这个指针指向其下一个右侧节点。如果找不到下一个右侧节点，则将 next 指针设置为 NULL。
+
+初始状态下，所有 next 指针都被设置为 NULL。
+
+进阶：
+
+你只能使用常量级额外空间。
+使用递归解题也符合要求，本题中递归程序占用的栈空间不算做额外的空间复杂度。
+
+
+# 思路
+
+因为需要常数级的空间复杂度，因此不可以声明一个保存下一层全部节点的列表，我们可以使用一个变量来记录下一层的起始节点，在遍历当前层的时候，将下一层串联起来，即更新next。
+
+定义三个变量，
+
+root_node：当前层的节点
+
+first_node_next_layer：下一层的初始节点
+
+cur_node_next_layer：串联下一层节点时需要的，保存下一层处理的当前节点
+
+初始化
+
+root_node为root，其它两个变量为None
+
+大致的思路就是在遍历当前层节点时，将下一层节点串联起来，需要换层时，将root_node更新为first_node_next_layer
+
+# 代码
+
+"""
+# Definition for a Node.
+class Node(object):
+    def __init__(self, val=0, left=None, right=None, next=None):
+        self.val = val
+        self.left = left
+        self.right = right
+        self.next = next
+"""
+
+class Solution(object):
+    def connect(self, root):
+        """
+        :type root: Node
+        :rtype: Node
+        """
+        if not root:
+            return None
+        
+        root_node = root
+        first_node_next_layer = None
+        cur_node_next_layer = None
+
+        while root_node:
+            # 更新下一层节点next指针
+            if root_node.left:
+                if not first_node_next_layer:
+                    first_node_next_layer = root_node.left
+                if cur_node_next_layer:
+                    cur_node_next_layer.next = root_node.left
+                cur_node_next_layer = root_node.left    
+            if root_node.right:
+                if not first_node_next_layer:
+                    first_node_next_layer = root_node.right
+                if cur_node_next_layer:
+                    cur_node_next_layer.next = root_node.right
+                cur_node_next_layer = root_node.right
+            # 同层移动节点
+            root_node = root_node.next
+            # 换层
+            if not root_node:
+                root_node = first_node_next_layer
+                first_node_next_layer = None
+                cur_node_next_layer = None    
+        return root
+        
