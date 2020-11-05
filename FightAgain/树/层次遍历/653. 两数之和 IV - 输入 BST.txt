@@ -1,0 +1,43 @@
+# 题目
+
+
+# 思路
+
+可以前序遍历，然后双指针来得到结果
+
+还可以借助字典，使用层序遍历来得到结果
+
+本题使用字典+层序遍历
+
+# 代码
+
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution(object):
+    def findTarget(self, root, k):
+        """
+        :type root: TreeNode
+        :type k: int
+        :rtype: bool
+        """
+        if not root:
+            return False
+        db = {}
+        queue = [root]
+        while queue:
+            node = queue.pop(0)
+            if k - node.val in db:
+                return True
+            else:
+                db[node.val] = True
+            if node.left:
+                queue.append(node.left)
+            if node.right:
+                queue.append(node.right)
+        return False
+
+
