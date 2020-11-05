@@ -1,0 +1,74 @@
+# 题目
+
+
+# 思路
+
+思路1
+
+递归，一个完整的树的左节点之和等于左子树中左节点之和加上右子树中左节点之和，其中对于左子树，假如左子树只有一个根节点，则直接返回左子树根节点的值
+
+思路2
+
+层次遍历，队列中保存的元素，（节点，节点在该层中的位置），注意，假如父节点在本层的位置为i，那期左右节点在下层的位置为2*i和2*i+1
+
+# 代码
+
+思路1
+
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution(object):
+    def sumOfLeftLeaves(self, root):
+        """
+        :type root: TreeNode
+        :rtype: int
+        """
+        if not root:
+            return 0
+        res = 0
+        l = root.left
+        if l and not l.left and not l.right:
+            res += l.val
+        else:
+            res += self.sumOfLeftLeaves(l)
+        return res + self.sumOfLeftLeaves(root.right)
+    
+思路2
+
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution(object):
+    def sumOfLeftLeaves(self, root):
+        """
+        :type root: TreeNode
+        :rtype: int
+        """
+        if not root or not root.left and not root.right:
+            return 0
+
+        queue = [(root, 0)]
+        res = 0
+
+        while queue:
+            node = queue.pop(0)
+            if not node[0].left and not node[0].right:
+                if node[1] % 2 == 0:
+                    res += node[0].val
+            if node[0].left:
+                queue.append((node[0].left, node[1] * 2))
+            if node[0].right:
+                queue.append((node[0].right, node[1] * 2 + 1))
+
+        return res
+
+
