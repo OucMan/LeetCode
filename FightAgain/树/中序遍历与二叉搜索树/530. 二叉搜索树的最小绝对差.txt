@@ -1,0 +1,60 @@
+# 题目
+
+给你一棵所有节点为非负值的二叉搜索树，请你计算树中任意两节点的差的绝对值的最小值。
+
+示例：
+
+输入：
+
+   1
+    \
+     3
+    /
+   2
+
+输出：
+1
+
+解释：
+最小绝对差为 1，其中 2 和 1 的差的绝对值为 1（或者 2 和 3）。
+
+
+# 思路
+
+二叉搜索树，使用中序遍历，便可以得到所有节点从小到大的排列，得到该序列后，在以此比较相邻节点的差值，得到最小值
+
+本题，我们定义两个全局变量用来保存前一节点值以及当前的最小差值，在中序遍历的过程中，更新这两个变量即可，从而不需要列表保存整个树的值
+
+
+# 代码
+
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution(object):
+
+    def __init__(self):
+        self.pre = float('-inf')
+        self.diff = float('inf')
+
+    def getMinimumDifference(self, root):
+        """
+        :type root: TreeNode
+        :rtype: int
+        """
+        if not root:
+            return 0
+        self.mid_order(root)
+        return self.diff
+    
+    def mid_order(self, root):
+        if not root:
+            return
+        self.mid_order(root.left)
+        self.diff = min(self.diff, root.val - self.pre)
+        self.pre = root.val
+        self.mid_order(root.right)
