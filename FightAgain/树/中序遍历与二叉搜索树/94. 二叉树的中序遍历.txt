@@ -1,0 +1,69 @@
+# 题目
+
+给定一个二叉树的根节点 root ，返回它的 中序 遍历。
+
+# 思路
+
+左根右
+
+思路1，递归
+
+思路2，迭代
+
+# 代码
+
+思路1
+
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution(object):
+    def inorderTraversal(self, root):
+        """
+        :type root: TreeNode
+        :rtype: List[int]
+        """
+        if not root:
+            return []
+        
+        left = self.inorderTraversal(root.left)
+        right = self.inorderTraversal(root.right)
+
+        return left + [root.val] + right
+
+
+思路2
+
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution(object):
+    def inorderTraversal(self, root):
+        """
+        :type root: TreeNode
+        :rtype: List[int]
+        """
+        if not root:
+            return []
+        
+        stack = []
+        node = root
+        res = []
+
+        while stack or node:
+            if node:
+                stack.append(node)
+                node = node.left
+            else:
+                tmp = stack.pop()
+                res.append(tmp.val)
+                node = tmp.right
+        
+        return res
+
