@@ -1,0 +1,64 @@
+# 题目
+
+给定一个 N 叉树，返回其节点值的前序遍历。
+
+# 思路
+
+思路1，递归
+
+思路2，迭代
+
+
+# 代码
+
+思路1
+
+"""
+# Definition for a Node.
+class Node(object):
+    def __init__(self, val=None, children=None):
+        self.val = val
+        self.children = children
+"""
+
+class Solution(object):
+    def preorder(self, root):
+        """
+        :type root: Node
+        :rtype: List[int]
+        """
+        if not root:
+            return []
+        res = [root.val]
+        for c in root.children:
+            res += self.preorder(c)
+        return res
+
+思路2
+
+"""
+# Definition for a Node.
+class Node(object):
+    def __init__(self, val=None, children=None):
+        self.val = val
+        self.children = children
+"""
+
+class Solution(object):
+    def preorder(self, root):
+        """
+        :type root: Node
+        :rtype: List[int]
+        """
+        if not root:
+            return []
+        res = []
+        stack = [root]
+        while stack:
+            node = stack.pop()
+            res.append(node.val)
+            ch = node.children
+            stack += ch[::-1]
+        return res
+        
+        
