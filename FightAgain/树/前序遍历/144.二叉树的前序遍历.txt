@@ -1,0 +1,62 @@
+# 题目
+
+给你二叉树的根节点 root ，返回它节点值的 前序 遍历。
+
+# 思路
+
+前序，根，左右
+
+思路1，递归
+
+思路2，迭代，借助栈，注意入栈的时候先右后左，才能保证出栈的时候先左后右
+
+# 代码
+
+思路1
+
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution(object):
+    def preorderTraversal(self, root):
+        """
+        :type root: TreeNode
+        :rtype: List[int]
+        """
+        if not root:
+            return []
+        res = [root.val]
+        res += self.preorderTraversal(root.left)
+        res += self.preorderTraversal(root.right)
+        return res
+
+思路2
+
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution(object):
+    def preorderTraversal(self, root):
+        """
+        :type root: TreeNode
+        :rtype: List[int]
+        """
+        if not root:
+            return []
+        res = []
+        stack = [root]
+        while stack:
+            node = stack.pop()
+            res.append(node.val)
+            if node.right:
+                stack.append(node.right)
+            if node.left:
+                stack.append(node.left)
+        return res
+
