@@ -1,0 +1,62 @@
+# 题目
+
+给定一个二叉树，返回它的 后序 遍历。
+
+# 思路
+
+左右根
+
+思路1，递归
+
+思路2，迭代，参考前序变量的实现，改变左右节点的入栈顺序（根，右，左），并在最后翻转结果
+
+# 代码
+
+思路1
+
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution(object):
+    def postorderTraversal(self, root):
+        """
+        :type root: TreeNode
+        :rtype: List[int]
+        """
+        if not root:
+            return []
+        left = self.postorderTraversal(root.left)
+        right = self.postorderTraversal(root.right)
+        return left + right + [root.val]
+
+思路2
+
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution(object):
+    def postorderTraversal(self, root):
+        """
+        :type root: TreeNode
+        :rtype: List[int]
+        """
+        if not root:
+            return []
+        res = []
+        stack = [root]
+
+        while stack:
+            node = stack.pop()
+            res.append(node.val)
+            if node.left:
+                stack.append(node.left)
+            if node.right:
+                stack.append(node.right)
+        return res[::-1]
+
