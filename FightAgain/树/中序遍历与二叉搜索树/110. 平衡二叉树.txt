@@ -1,0 +1,36 @@
+# 题目
+
+给定一个二叉树，判断它是否是高度平衡的二叉树。
+
+本题中，一棵高度平衡二叉树定义为：
+
+一个二叉树每个节点 的左右两个子树的高度差的绝对值不超过 1 。
+
+# 思路
+
+递归，一个树是平衡二叉树的即，左子树是平衡二叉树，右子树是平衡二叉树，然后左子树和右子树的高度相差小于等于1
+
+# 代码
+
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution(object):
+    def isBalanced(self, root):
+        """
+        :type root: TreeNode
+        :rtype: bool
+        """
+        if not root:
+            return True
+        return self.isBalanced(root.left) and self.isBalanced(root.right) and abs(self.height(root.left) - self.height(root.right)) <= 1
+    
+    def height(self, root):
+        if not root:
+            return 0
+        return max(self.height(root.left), self.height(root.right)) + 1
+        
+        
