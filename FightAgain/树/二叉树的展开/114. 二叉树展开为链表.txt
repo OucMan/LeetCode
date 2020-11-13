@@ -1,0 +1,90 @@
+# 题目
+
+给定一个二叉树，原地将它展开为一个单链表。
+ 
+例如，给定二叉树
+
+    1
+   / \
+  2   5
+ / \   \
+3   4   6
+将其展开为：
+
+1
+ \
+  2
+   \
+    3
+     \
+      4
+       \
+        5
+         \
+          6
+
+
+# 思路
+
+思路1，展开后的结果就是二叉树前序遍历的结果，因此可以使用前序遍历来解题
+
+思路2，递归，首先展开左子树，并将其赋值为根节点的右子树（原右子树提前保存），找到新树的最下最右的节点，即为A，然后展开原右子树，并赋值为A的右子树
+
+# 代码
+
+思路1
+
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution(object):
+    def flatten(self, root):
+        """
+        :type root: TreeNode
+        :rtype: None Do not return anything, modify root in-place instead.
+        """
+        if not root:
+            return None
+        stack = [root]
+        pre = None
+        while stack:
+            node = stack.pop()
+            if pre:
+                pre.right = node
+                pre.left = None
+            pre = node
+            if node.right:
+                stack.append(node.right)
+            if node.left:
+                stack.append(node.left)
+        
+
+
+思路2
+
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution(object):
+    def flatten(self, root):
+        """
+        :type root: TreeNode
+        :rtype: None Do not return anything, modify root in-place instead.
+        """
+        if not root:
+            return None
+        self.flatten(root.left)
+        right = root.right
+        root.right = root.left
+        root.left = None
+        while root.right:
+            root = root.right
+        self.flatten(right)
+        root.right = right
+
