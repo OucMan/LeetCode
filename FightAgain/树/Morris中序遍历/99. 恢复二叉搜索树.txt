@@ -1,0 +1,51 @@
+# 题目
+
+给你二叉搜索树的根节点 root ，该树中的两个节点被错误地交换。请在不改变其结构的情况下，恢复这棵树。
+
+进阶：使用 O(n) 空间复杂度的解法很容易实现。你能想出一个只使用常数空间的解决方案吗？
+
+# 思路
+
+思路1，对二叉搜索树进行中序遍历，正常情况下应该是顺序的，如果两个节点交换，那么不会是顺序的，因此我们就可以根据前后节点的大小关系来确定交换的两个节点，对于第一个节点，一定是第一次出现当前节点小于前一个节点的前一个节点，而第二个节点一定是最后一次出现当前节点小于前一个节点的当前节点，得到两个节点后，直接交换值就可以
+
+思路2，Morris算法，现在不会
+
+# 代码
+
+代码1
+
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution(object):
+    def recoverTree(self, root):
+        """
+        :type root: TreeNode
+        :rtype: None Do not return anything, modify root in-place instead.
+        """
+        if not root:
+            return
+        
+        stack = []
+        node = root
+        first = None
+        second = None
+        pre = TreeNode(float('-inf'))
+
+        while stack or node:
+            if node:
+                stack.append(node)
+                node = node.left
+            else:
+                tmp = stack.pop()
+                if pre.val > tmp.val:
+                    if not first:
+                        first = pre
+                    second = tmp
+                pre = tmp
+                node = tmp.right
+        
+        first.val, second.val = second.val, first.val
