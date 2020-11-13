@@ -1,0 +1,49 @@
+# 题目
+
+
+# 思路
+
+可以先遍历链表，得到列表，然后就转变成108题
+
+还可以利用快慢指针来获得链表的中间节点，进而构造树
+
+# 代码
+
+# Definition for singly-linked list.
+# class ListNode(object):
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution(object):
+    def sortedListToBST(self, head):
+        """
+        :type head: ListNode
+        :rtype: TreeNode
+        """
+        if not head:
+            return None 
+        return self.build(head, None)
+    
+    def get_mid(self, left, right):
+        slow = fast = left
+        while fast != right and fast.next != right:
+            fast = fast.next.next
+            slow = slow.next
+        return slow
+    
+    def build(self, left, right):
+        if left == right:
+            return None
+        mid = self.get_mid(left, right)
+        root = TreeNode(mid.val)
+        root.left = self.build(left, mid)
+        root.right = self.build(mid.next, right)
+        return root
+        
+        
