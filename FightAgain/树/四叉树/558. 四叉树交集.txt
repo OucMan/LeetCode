@@ -1,0 +1,63 @@
+# 题目
+
+二进制矩阵中的所有元素不是 0 就是 1 。
+
+给你两个四叉树，quadTree1 和 quadTree2。其中 quadTree1 表示一个 n * n 二进制矩阵，而 quadTree2 表示另一个 n * n 二进制矩阵。
+
+请你返回一个表示 n * n 二进制矩阵的四叉树，它是 quadTree1 和 quadTree2 所表示的两个二进制矩阵进行 按位逻辑或运算 的结果。
+
+# 思路
+
+递归
+
+首先看一下这个两个四叉树的根节点是叶子节点吗？当全部是叶子节点时，求并集返回的也是叶子节点，值为两个根节点值的并集，当只有一个根节点是叶子节点时，根据该节点的值是0或者1，来判定是返回哪一个根节点；当两个根节点都不是根节点时，什么最终结果的根节点，使用递归，将正方形矩阵分成四个子矩阵，分别求出最终结果根节点的四个角，并根据四个子矩阵的情况来改变最终结果根节点的isLeaf和val。
+
+# 代码
+
+"""
+# Definition for a QuadTree node.
+class Node(object):
+    def __init__(self, val, isLeaf, topLeft, topRight, bottomLeft, bottomRight):
+        self.val = val
+        self.isLeaf = isLeaf
+        self.topLeft = topLeft
+        self.topRight = topRight
+        self.bottomLeft = bottomLeft
+        self.bottomRight = bottomRight
+"""
+
+class Solution(object):
+    def intersect(self, quadTree1, quadTree2):
+        """
+        :type quadTree1: Node
+        :type quadTree2: Node
+        :rtype: Node
+        """
+        if quadTree1.isLeaf or quadTree2.isLeaf:
+            if quadTree1.isLeaf and quadTree2.isLeaf:
+                v = quadTree1.val or quadTree2.val
+                return Node(v, True, None, None, None,None)
+            if quadTree1.isLeaf:
+                if quadTree1.val == 0:
+                    return quadTree2
+                else:
+                    return quadTree1
+            if quadTree2.isLeaf:
+                if quadTree2.val == 0:
+                    return quadTree1
+                else:
+                    return quadTree2
+        else:
+            node = Node(0, False, None, None, None, None)
+            node.topLeft = self.intersect(quadTree1.topLeft, quadTree2.topLeft)
+            node.topRight = self.intersect(quadTree1.topRight, quadTree2.topRight)
+            node.bottomLeft = self.intersect(quadTree1.bottomLeft, quadTree2.bottomLeft)
+            node.bottomRight = self.intersect(quadTree1.bottomRight, quadTree2.bottomRight)
+            if node.topLeft.isLeaf and node.topRight.isLeaf and node.bottomLeft.isLeaf and node.bottomRight.isLeaf:
+                tmp = node.topLeft.val
+                if tmp == node.topRight.val and tmp == node.bottomLeft.val and tmp == node.bottomRight.val:
+                    node.val = tmp
+                    node.isLeaf = True
+                    node.topLeft, node.topRight, node.bottomLeft, node.bottomRight = None, None, None, None
+            return node
+
