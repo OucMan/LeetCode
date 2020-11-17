@@ -1,0 +1,37 @@
+# 题目
+
+
+# 思路
+
+首先判断是否第一个元素为0，是则返回0，否则继续判断
+
+动态规划
+
+dp[i]表示前i个元素可以有多少种组合，起始为dp[0] = 1,即根据nums[0]只有一个解析结果
+当nums[i]不等于0时，nums[0:i+1]可以是nums[0:i]解析后面跟上一个nums[i]解析的结果，即dp[i-1]种，当nums[i-1:i+1]这两个元素在10和26之间时，可以nums[:i-1]解析后面跟上nums[i-1:i+1]这两个元素解析的结果，共dp[i-2]种，因此最多的情况是dp[i] = dp[i-1] + dp[i-2]，注意考虑索引的边界
+
+# 代码
+
+class Solution(object):
+    def numDecodings(self, s):
+        """
+        :type s: str
+        :rtype: int
+        """
+        if not s or len(s) <= 0 or s[0] == '0':
+            return 0
+        dp = [0] * len(s)
+        dp[0] = 1
+        for i in range(1, len(s)):
+            if s[i] != '0':
+                dp[i] = dp[i-1]
+            if '09' < s[i-1:i+1] < '27':
+                if i != 1:
+                    dp[i] += dp[i-2]
+                else:
+                    dp[i] += 1
+        return dp[-1]
+
+
+
+        
