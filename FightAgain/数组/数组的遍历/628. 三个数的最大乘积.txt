@@ -1,0 +1,53 @@
+# 题目
+
+# 思路
+
+结果产生于，最大的三个数的乘积或者最小两个数的乘积再乘上最大的一个数
+
+思路1，排序，返回max(num[0]*num[1]*num[-1], num[-1]*num[-2]*num[-3])
+
+思路2，一次遍历，确定上面的五个数，即前三个最大的，前两个最小的
+
+# 代码
+
+思路1
+
+class Solution(object):
+    def maximumProduct(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: int
+        """
+        nums.sort()
+        return max(nums[0]*nums[1]*nums[-1], nums[-1]*nums[-2]*nums[-3])
+
+思路2
+
+class Solution(object):
+    def maximumProduct(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: int
+        """
+        max_v_1, max_v_2, max_v_3 = float('-inf'), float('-inf'), float('inf')
+        min_v_1, min_v_2 = float('inf'), float('inf')
+
+        for n in nums:
+            if n < min_v_1:
+                min_v_2 = min_v_1
+                min_v_1 = n
+            elif n < min_v_2:
+                min_v_2 = n
+            if n > max_v_1:
+                max_v_3 = max_v_2
+                max_v_2 = max_v_1
+                max_v_1 = n
+            elif n > max_v_2:
+                max_v_3 = max_v_2
+                max_v_2 = n
+            elif n > max_v_3:
+                max_v_3 = n
+        
+        return max(max_v_1*max_v_2*max_v_3, min_v_1*min_v_2*max_v_1)
+        
+        
