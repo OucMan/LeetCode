@@ -1,0 +1,34 @@
+# 题目
+
+
+# 思路
+
+声明一个变量index用来保存当前伤害能够持续到达的时间点，初始为time[0] + duration，然后向后遍历time列表，假如当前时间点大于等于index，说明这一次攻击和之前的攻击时间不会冲突，因此，本次攻击时间长度为duration，假如当前时间点小于index，同时当前时间+duration大于index，说明这一次攻击和之前的攻击有重叠，因此这一次攻击的时间长为当前时间+duration-index，其余情况说明，本次攻击会被之前的攻击完全掩盖。
+
+# 代码
+
+class Solution(object):
+    def findPoisonedDuration(self, timeSeries, duration):
+        """
+        :type timeSeries: List[int]
+        :type duration: int
+        :rtype: int
+        """
+        if not timeSeries or len(timeSeries)  == 0:
+            return 0
+        if len(timeSeries) == 1:
+            return duration
+        
+        index = timeSeries[0] + duration
+        res = duration
+
+        for i in range(1, len(timeSeries)):
+            if timeSeries[i] >= index:
+                res += duration
+                index = timeSeries[i] + duration
+            else:
+                if timeSeries[i] + duration > index:
+                    res += (timeSeries[i] + duration - index)
+                    index = timeSeries[i] + duration
+        return res
+
