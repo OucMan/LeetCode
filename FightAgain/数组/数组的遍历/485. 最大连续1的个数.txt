@@ -1,0 +1,38 @@
+# 题目
+
+给定一个二进制数组， 计算其中最大连续1的个数。
+
+示例 1:
+
+输入: [1,1,0,1,1,1]
+输出: 3
+解释: 开头的两位和最后的三位都是连续1，所以最大连续1的个数是 3.
+注意：
+
+输入的数组只包含 0 和1。
+输入数组的长度是正整数，且不超过 10,000。
+
+# 思路
+
+声明两个变量，一个保存当前连续1的个数cur，一个用来保存目前最大的连续1的个数max_v，遍历数组，当当前值为1，cur加1，当当前值为0，更新max_v，并且重置cur，即已经遍历完上一个连续1序列，注意最后假如元素为1，则最大值有可能还保存再cur中，没有更新到max_v中，因此返回值为max(cur, max_v)
+
+# 代码
+
+class Solution(object):
+    def findMaxConsecutiveOnes(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: int
+        """
+        cur = 0
+        max_v = 0
+
+        for n in nums:
+            if n == 1:
+                cur += 1
+            else:
+                max_v = max(max_v, cur)
+                cur = 0
+        return max(max_v, cur)
+
+
