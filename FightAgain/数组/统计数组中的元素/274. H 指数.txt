@@ -1,0 +1,58 @@
+# 题目
+
+
+# 思路
+
+思路1，从大到小依次暴力检测
+
+思路2，先排序，citations[i]后面有N-i个元素（包括citations[i]），因此假如citations[i]>=N-i，则说明N-i符合条件
+
+# 代码
+
+思路1
+
+class Solution(object):
+    def hIndex(self, citations):
+        """
+        :type citations: List[int]
+        :rtype: int
+        """
+
+        if not citations or len(citations) == 0:
+            return 0
+        
+        l = len(citations)
+
+        while l > 0:
+            tmp = 0
+            for c in citations:
+                if c >= l:
+                    tmp += 1
+            
+            if tmp >= l:
+                return l
+            l -= 1
+    
+        return 0
+        
+思路2
+
+class Solution(object):
+    def hIndex(self, citations):
+        """
+        :type citations: List[int]
+        :rtype: int
+        """
+        if not citations or len(citations) == 0:
+            return 0
+        
+        citations.sort()
+        if citations[-1] == 0:
+            return 0
+        
+        N = len(citations)
+        for i in range(N):
+            if citations[i] >= N-i:
+                return N-i
+        return 0
+
