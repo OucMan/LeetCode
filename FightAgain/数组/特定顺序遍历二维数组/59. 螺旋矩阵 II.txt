@@ -1,0 +1,64 @@
+# 题目
+
+给定一个正整数 n，生成一个包含 1 到 n2 所有元素，且元素按顺时针顺序螺旋排列的正方形矩阵。
+
+示例:
+
+输入: 3
+输出:
+[
+ [ 1, 2, 3 ],
+ [ 8, 9, 4 ],
+ [ 7, 6, 5 ]
+]
+
+
+# 思路
+
+设置，上下左右四个边界，根据索引，按照顺序设置元素
+
+# 代码
+
+class Solution(object):
+    def generateMatrix(self, n):
+        """
+        :type n: int
+        :rtype: List[List[int]]
+        """
+        left, right = 0, n - 1
+        top, bottom = 0, n - 1
+        num = 1
+        counter = n ** 2
+        res = [[0 for m in range(n)] for k in range(n)]
+        while num <= counter:
+            # 最上一层，从左到右
+            i = left
+            while i <= right and num <= counter:
+                res[top][i] = num
+                num += 1
+                i += 1
+            top += 1
+            # 最右列，从上到下
+            i = top
+            while i <= bottom and num <= counter:
+                res[i][right] = num
+                num += 1
+                i += 1
+            right -= 1
+            # 最下一层，从右到左
+            i = right
+            while i >= left and num <= counter:
+                res[bottom][i] = num
+                num += 1
+                i -= 1
+            bottom -= 1
+            # 最左列，从下向上
+            i = bottom
+            while i >= top and num <= counter:
+                res[i][left] = num
+                num += 1
+                i -= 1
+            left += 1
+        return res
+        
+        
