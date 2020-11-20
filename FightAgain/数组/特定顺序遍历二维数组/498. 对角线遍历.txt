@@ -1,0 +1,70 @@
+# 题目
+
+给定一个含有 M x N 个元素的矩阵（M 行，N 列），请以对角线遍历的顺序返回这个矩阵中的所有元素，对角线遍历如下图所示。
+
+ 
+
+示例:
+
+输入:
+[
+ [ 1, 2, 3 ],
+ [ 4, 5, 6 ],
+ [ 7, 8, 9 ]
+]
+
+输出:  [1,2,4,7,5,3,6,8,9]
+
+
+
+# 思路
+
+查找所有对角线元素，这些对角线的起点即为最上一层的点与最右列的点，注意使用一个变量标志方向，
+
+
+# 代码
+
+
+class Solution(object):
+    def findDiagonalOrder(self, matrix):
+        """
+        :type matrix: List[List[int]]
+        :rtype: List[int]
+        """
+        if not matrix or not matrix[0]:
+            return []
+        
+        M = len(matrix)
+        N = len(matrix[0])
+        res = []
+        flag = False
+        
+        for i in range(N):
+            tmp = []
+            r, c = 0, i
+            while c >= 0 and r < M:
+                if flag:
+                    tmp.append(matrix[r][c])
+                else:
+                    tmp.insert(0, matrix[r][c])
+                r += 1
+                c -= 1
+            res += tmp
+            flag = not flag
+        
+        for i in range(1, M):
+            tmp = []
+            r, c = i, N-1
+            while r < M and c >= 0:
+                if flag:
+                    tmp.append(matrix[r][c])
+                else:
+                    tmp.insert(0, matrix[r][c])
+                r += 1
+                c -= 1
+            res += tmp
+            flag = not flag
+
+        return res
+        
+        
