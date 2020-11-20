@@ -1,0 +1,80 @@
+# 题目
+
+
+# 思路
+
+思路1：利用异常，依次旋转遍历
+
+思路2：使用索引，以此遍历
+
+# 代码
+
+思路1
+
+class Solution(object):
+    def spiralOrder(self, matrix):
+        """
+        :type matrix: List[List[int]]
+        :rtype: List[int]
+        """
+        if not matrix:
+            return []
+        res = []
+        try:
+            while True:
+                res += matrix.pop(0)
+                right = [row.pop() for row in matrix]
+                res += right
+                res += matrix.pop()[::-1]
+                left = [row.pop(0) for row in matrix][::-1]
+                res += left
+        except:
+            return res
+            
+思路2
+
+class Solution(object):
+    def spiralOrder(self, matrix):
+        """
+        :type matrix: List[List[int]]
+        :rtype: List[int]
+        """
+        if not matrix or not matrix[0]:
+            return []
+        
+        left, right = 0, len(matrix[0]) - 1
+        top, bottom = 0, len(matrix) - 1
+        num = len(matrix) * len(matrix[0])
+        res = []
+        while num > 0:
+            # 最上面，从左向右
+            i = left
+            while i <= right and num >= 1:
+                res.append(matrix[top][i])
+                num -= 1 
+                i += 1
+            top += 1
+            # 最右边，从上到下
+            i = top
+            while i <= bottom and num >= 1:
+                res.append(matrix[i][right])
+                num -= 1
+                i += 1
+            right -= 1
+            # 最下面，从右到左
+            i = right
+            while i >= left and num >= 1:
+                res.append(matrix[bottom][i])
+                num -= 1
+                i -= 1
+            bottom -= 1
+            # 最左边，从下到上
+            i = bottom
+            while i >= top and num >= 1:
+                res.append(matrix[i][left])
+                num -= 1
+                i -= 1
+            left += 1
+        return res
+
+
