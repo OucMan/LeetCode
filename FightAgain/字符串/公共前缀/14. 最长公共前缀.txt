@@ -1,0 +1,48 @@
+# 题目
+
+编写一个函数来查找字符串数组中的最长公共前缀。
+
+如果不存在公共前缀，返回空字符串 ""。
+
+示例 1:
+
+输入: ["flower","flow","flight"]
+输出: "fl"
+示例 2:
+
+输入: ["dog","racecar","car"]
+输出: ""
+解释: 输入不存在公共前缀。
+说明:
+
+所有输入只包含小写字母 a-z 。
+
+
+# 思路
+
+首先排序，直接查看第一个元素和最后一个元素的最长公共前缀即可
+
+
+# 代码
+
+class Solution(object):
+    def longestCommonPrefix(self, strs):
+        """
+        :type strs: List[str]
+        :rtype: str
+        """
+        if not strs:
+            return ''
+        
+        strs.sort()
+        start = strs[0]
+        end = strs[-1]
+        res = ''
+        for i in range(len(start)):
+            if i >= len(end) or start[i] != end[i]:
+                break
+            res += start[i]
+        return res
+        
+        
+
