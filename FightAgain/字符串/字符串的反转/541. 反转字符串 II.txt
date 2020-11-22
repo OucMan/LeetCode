@@ -1,0 +1,50 @@
+# 题目
+
+给定一个字符串 s 和一个整数 k，你需要对从字符串开头算起的每隔 2k 个字符的前 k 个字符进行反转。
+
+如果剩余字符少于 k 个，则将剩余字符全部反转。
+如果剩余字符小于 2k 但大于或等于 k 个，则反转前 k 个字符，其余字符保持原样。
+
+示例:
+
+输入: s = "abcdefg", k = 2
+输出: "bacdfeg"
+ 
+
+提示：
+
+该字符串只包含小写英文字母。
+给定字符串的长度和 k 在 [1, 10000] 范围内。
+
+
+# 思路
+
+先计算前2nk和，然后处理剩余的，注意边界索引就好
+
+# 代码
+
+class Solution(object):
+    def reverseStr(self, s, k):
+        """
+        :type s: str
+        :type k: int
+        :rtype: str
+        """
+        if not s:
+            return ''
+        s = list(s)
+        n = len(s) // (2 * k)
+        for i in range(0, n):
+            s[2 * k * i: 2 * k * i + k] = self.helper(s[2 * k * i: 2 * k * i + k])
+        if 2 * n * k >= len(s):
+            return ''.join(s)
+
+        if 2 * n * k + k > len(s):
+            s[2 * n * k: len(s)] = self.helper(s[2 * n * k: len(s)])
+        else:
+            s[2 * n * k: 2 * n * k + k] = self.helper(s[2 * n * k: 2 * n * k + k])
+        return ''.join(s)
+
+    def helper(self, s):
+        return s[::-1]
+
