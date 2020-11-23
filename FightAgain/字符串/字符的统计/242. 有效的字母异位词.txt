@@ -1,0 +1,56 @@
+# 题目
+
+
+# 思路
+
+思路1
+
+两个字符串排序后是否相等；
+
+思路2
+
+借助字典
+
+
+# 代码
+
+思路1
+
+class Solution(object):
+    def isAnagram(self, s, t):
+        """
+        :type s: str
+        :type t: str
+        :rtype: bool
+        """
+        return True if sorted(s) == sorted(t) else False
+
+思路2
+
+class Solution(object):
+    def isAnagram(self, s, t):
+        """
+        :type s: str
+        :type t: str
+        :rtype: bool
+        """
+        tmp = {}
+        for c in s:
+            if c in tmp:
+                tmp[c] += 1
+            else:
+                tmp[c] = 1
+        
+        for c in t:
+            if c in tmp:
+                tmp[c] -= 1
+            else:
+                return False
+        
+        for k in tmp:
+            if tmp[k] != 0:
+                return False
+        
+        return True
+        
+        
