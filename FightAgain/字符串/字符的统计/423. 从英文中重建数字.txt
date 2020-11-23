@@ -1,0 +1,63 @@
+# 题目
+
+给定一个非空字符串，其中包含字母顺序打乱的英文单词表示的数字0-9。按升序输出原始的数字。
+
+注意:
+
+输入只包含小写英文字母。
+输入保证合法并可以转换为原始的数字，这意味着像 "abc" 或 "zerone" 的输入是不允许的。
+输入字符串的长度小于 50,000。
+示例 1:
+
+输入: "owoztneoer"
+
+输出: "012" (zeroonetwo)
+示例 2:
+
+输入: "fviefuro"
+
+输出: "45" (fourfive)
+
+# 思路
+
+分析
+
+将0-9的英文分析一下，看看每个字母的出现情况，其中
+
+Counter({'e': 9, 'o': 4, 'n': 4, 'i': 4, 'r': 3, 't': 3, 'h': 2, 'f': 2, 'v': 2, 's': 2, 'z': 1, 'w': 1, 'u': 1, 'x': 1, 'g': 1})
+
+z(zero)出现一次，x(six)出现一次，w(two)出现一次，u(four)出现一次，g(eight)出现1次
+
+s(six,seven)出现两次，f(four, five)出现两次，h(three, eight)出现两次
+
+i(five, six, eight, nine)出现四次, o(zero, two, four, one)出现四次
+
+因此，我们首先获得字符串的计数器，根据z, x, w, u, g得到0， 6， 2， 4， 8出现的次数，然后根据s, f, h 配合6， 4， 8出现的次数，得到7， 5， 3出现的次数，然后根据i出现的次数，配合5,6,8的次数得到9出现的次数，根据o出现的次数配合0,2,4的次数得到1出现的次数。
+
+# 代码
+
+from collections import Counter
+
+class Solution(object):
+    def originalDigits(self, s):
+        """
+        :type s: str
+        :rtype: str
+        """
+        c = Counter(s)
+        tmp = {}
+        
+        tmp['0'] = c['z']
+        tmp['2'] = c['w']
+        tmp['4'] = c['u']
+        tmp['6'] = c['x']
+        tmp['8'] = c['g']
+        tmp['3'] = c['h'] - tmp['8']
+        tmp['5'] = c['f'] - tmp['4']
+        tmp['7'] = c['s'] - tmp['6']
+        tmp['9'] = c['i'] - tmp['5'] - tmp['6'] - tmp['8']
+        tmp['1'] = c['o'] - tmp['0'] - tmp['2'] - tmp['4']
+
+        l = [k[0] * k[1] for k in sorted(tmp.items())]
+        return ''.join(l)
+
