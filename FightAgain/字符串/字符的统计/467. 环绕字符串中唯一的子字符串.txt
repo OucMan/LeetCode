@@ -1,0 +1,62 @@
+# 题目
+
+把字符串 s 看作是“abcdefghijklmnopqrstuvwxyz”的无限环绕字符串，所以 s 看起来是这样的："...zabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcd....". 
+
+现在我们有了另一个字符串 p 。你需要的是找出 s 中有多少个唯一的 p 的非空子串，尤其是当你的输入是字符串 p ，你需要输出字符串 s 中 p 的不同的非空子串的数目。 
+
+注意: p 仅由小写的英文字母组成，p 的大小可能超过 10000。
+
+ 
+
+示例 1:
+
+输入: "a"
+输出: 1
+解释: 字符串 S 中只有一个"a"子字符。
+ 
+
+示例 2:
+
+输入: "cac"
+输出: 2
+解释: 字符串 S 中的字符串“cac”只有两个子串“a”、“c”。.
+ 
+
+示例 3:
+
+输入: "zab"
+输出: 6
+解释: 在字符串 S 中有六个子串“z”、“a”、“b”、“za”、“ab”、“zab”。.
+
+
+# 思路
+
+借助一个字典，用来保存以某字符结尾的连续字符串的最大长度，c->x，即以c结尾的最长连续字符串的长度为x，因此可以得到的子字符串的个数为x，所以最终的结果为该字典value的和
+
+
+# 代码
+
+import collections
+
+class Solution(object):
+    def findSubstringInWraproundString(self, p):
+        """
+        :type p: str
+        :rtype: int
+        """
+        
+        p = '^' + p
+        tmp = collections.defaultdict(lambda: 0)
+        c = 1
+        for i in range(1, len(p)):
+            if ord(p[i]) - ord(p[i-1]) == 1 or ord(p[i]) - ord(p[i-1]) == -25:
+                c += 1
+            else:
+                c = 1
+            tmp[p[i]] = max(tmp[p[i]], c)
+        
+        return sum(tmp.values())
+
+
+
+
