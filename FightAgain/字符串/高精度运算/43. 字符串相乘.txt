@@ -1,0 +1,111 @@
+# 题目
+
+给定两个以字符串形式表示的非负整数 num1 和 num2，返回 num1 和 num2 的乘积，它们的乘积也表示为字符串形式。
+
+示例 1:
+
+输入: num1 = "2", num2 = "3"
+输出: "6"
+示例 2:
+
+输入: num1 = "123", num2 = "456"
+输出: "56088"
+说明：
+
+num1 和 num2 的长度小于110。
+num1 和 num2 只包含数字 0-9。
+num1 和 num2 均不以零开头，除非是数字 0 本身。
+不能使用任何标准库的大数类型（比如 BigInteger）或直接将输入转换为整数来处理。
+
+# 思路
+
+思路1
+
+就像手算，竖式计算一样，得到结果
+
+思路2
+
+m位数乘以n位数，结果为m+n-1位或者m+n位，因此创建大小为m+n的列表用来保存结果
+
+索引为m-1的数字乘以n-1的数字的结果被放在所以为m+n-1的元素处，即两者的乘积共享给m+n-1的元素,
+索引为m-1的数字乘以n-2的数字的结果被放在所以为m+n-2的元素处，即两者的乘积共享给m+n-2的元素,
+...
+
+可以归纳得到索引为i的数字乘以索引为j的数字，其结果放在i+j+1处累加
+
+因此我们首先遍历两个数字，各个元素相乘得到结果列表中每一个元素的值，然后再遍历结果列表处理进位问题
+
+
+# 代码
+
+思路1
+
+class Solution(object):
+    def multiply(self, num1, num2):
+        """
+        :type num1: str
+        :type num2: str
+        :rtype: str
+        """
+        if num1 == '0' or num2 == '0':
+            return '0'
+        ans = '0'
+        m, n = len(num1), len(num2)
+        for i in range(n-1, -1, -1):
+            jinwei = 0
+            tmp = ''
+            chenshu = int(num2[i])
+            for j in range(m-1, -1, -1):
+                tmp = str((int(num1[j]) * chenshu + jinwei) % 10) + tmp
+                jinwei = (int(num1[j]) * chenshu + jinwei) // 10
+            if jinwei > 0:
+                tmp = str(jinwei) + tmp
+            tmp = tmp + '0' * (n-1-i)
+            ans = self.myadd(tmp, ans)
+        return ans
+    
+    def myadd(self, a, b):
+        if len(a) < len(b):
+            a = '0' * (len(b)-len(a)) + a
+        else:
+            b = '0' * (len(a)-len(b)) + b
+        jinwei = 0
+        res = ''
+        for i in range(len(a)-1, -1, -1):
+            res = str((int(a[i]) + int(b[i]) + jinwei) % 10)+ res
+            jinwei = (int(a[i]) + int(b[i]) + jinwei) // 10
+        if jinwei == 1:
+            res = '1' + res
+        return res
+
+思路2
+
+class Solution(object):
+    def multiply(self, num1, num2):
+        """
+        :type num1: str
+        :type num2: str
+        :rtype: str
+        """
+        if num1 == '0' or num2 == '0':
+            return '0'
+        res = [0] * (len(num1) + len(num2))
+        for i in range(len(num2)-1, -1, -1):
+            chengshu = int(num2[i]) 
+            for j in range(len(num1)-1, -1, -1):
+                res[i+j+1] += chengshu * int(num1[j])
+        jinwei = 0
+        for i in range(len(res)-1, -1, -1):
+            tmp = res[i]
+            res[i] = (res[i] + jinwei) % 10
+            jinwei = (tmp + jinwei) // 10
+        start = 0
+        if res[0] == 0:
+            start = 1
+        return ''.join([str(x) for x in res[start:]])
+
+
+
+
+        
+
