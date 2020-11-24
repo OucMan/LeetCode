@@ -1,0 +1,95 @@
+# 题目
+
+将非负整数 num 转换为其对应的英文表示。
+
+ 
+
+示例 1：
+
+输入：num = 123
+输出："One Hundred Twenty Three"
+示例 2：
+
+输入：num = 12345
+输出："Twelve Thousand Three Hundred Forty Five"
+示例 3：
+
+输入：num = 1234567
+输出："One Million Two Hundred Thirty Four Thousand Five Hundred Sixty Seven"
+示例 4：
+
+输入：num = 1234567891
+输出："One Billion Two Hundred Thirty Four Million Five Hundred Sixty Seven Thousand Eight Hundred Ninety One"
+ 
+
+提示：
+
+0 <= num <= 231 - 1
+
+# 思路
+
+num的值最大为2^31-1，即2147483647，我们首先按照千，百万，十亿来切分数字，例如，对于数字 1234567890，我们将它从低位开始每三个分成一组，得到 1,234,567,890，它的英文表示为 1 Billion 234 Million 567 Thousand 890。这样我们就将原问题分解成若干个三位整数转换为英文表示的问题了。
+
+
+# 代码
+
+class Solution(object):
+    def numberToWords(self, num):
+        """
+        :type num: int
+        :rtype: str
+        """
+        if num == 0:
+            return 'Zero'
+
+        one_num = {1: 'One', 2: 'Two', 3: 'Three', 4: 'Four', 5: 'Five', 6: 'Six', 7: 'Seven', 8: 'Eight', 9: 'Nine'}
+        two_num_less_20 = {10: 'Ten', 11: 'Eleven', 12: 'Twelve', 13: 'Thirteen', 14: 'Fourteen', 15: 'Fifteen', 16: 'Sixteen', 17: 'Seventeen', 18: 'Eighteen', 19: 'Nineteen'}
+        ten_num = {2: 'Twenty', 3: 'Thirty', 4: 'Forty', 5: 'Fifty', 6: 'Sixty', 7: 'Seventy', 8: 'Eighty', 9: 'Ninety'}
+
+        def helper(n):
+            res = ''
+            hundred = n // 100
+            rest = n - hundred * 100
+            if hundred:
+                res = one_num[hundred] + ' Hundred'
+            if rest:
+                if res:
+                    res += ' '
+                if rest in two_num_less_20:
+                    res = res + two_num_less_20[rest]
+                else:
+                    rest_two = rest // 10
+                    rest_one = rest - rest_two * 10
+                    if rest_two == 0:
+                        res += one_num[rest_one]
+                    elif rest_one == 0:
+                        res += ten_num[rest_two]
+                    else:
+                        res = res + ten_num[rest_two] + ' ' + one_num[rest_one]
+            return res
+
+
+
+        billion = num // 1000000000
+        million = (num - billion * 1000000000) // 1000000
+        thousand = (num - billion * 1000000000 - million * 1000000) // 1000
+        rest = num - billion * 1000000000 - million * 1000000 - thousand * 1000
+
+        res = ''
+        if billion:
+            res = helper(billion) + ' Billion'
+        if million:
+            if res:
+                res += ' '
+            res = res + helper(million) + ' Million'
+        if thousand:
+            if res:
+                res += ' '
+            res = res + helper(thousand) + ' Thousand'
+        if rest:
+            if res:
+                res += ' '
+            res = res + helper(rest)
+        return res
+        
+        
