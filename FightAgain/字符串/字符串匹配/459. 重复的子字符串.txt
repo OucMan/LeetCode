@@ -1,0 +1,59 @@
+# 题目
+
+
+# 思路
+
+思路1
+
+暴力法，从1开始到一半的长度，依次设置重复子串的长度，判断整个字符串是否能够由其构成
+
+思路2
+
+如果字符串 S 包含一个重复的子字符串，那么这意味着可以多次 “移位”`字符串，并使其与原始字符串匹配。
+
+例如：abcabc
+
+移位一次：cabcab
+移位两次：bcabca
+移位三次：abcabc
+
+为了实现这种思路，我们可以将两个S合并起来newS，这就包括了移位的所有情况，我们需要排除两种情况，就是全部移位和不移位的情况（全部移位才相等说明最小的重复子串是本身）。因此判断newS[1:-1]是否包含S即可，包括则存在，不包括则不存在。
+
+
+# 代码
+
+思路1
+
+class Solution(object):
+    def repeatedSubstringPattern(self, s):
+        """
+        :type s: str
+        :rtype: bool
+        """
+        if not s:
+            return True
+        if  len(s) == 1:
+            return False
+        
+        n = len(s)
+        for i in range(1, n // 2 + 1):
+            if n % i == 0:
+                if all(s[j] == s[j-i] for j in range(i, n)):
+                    return True
+        return False
+        
+
+思路2
+
+class Solution(object):
+    def repeatedSubstringPattern(self, s):
+        """
+        :type s: str
+        :rtype: bool
+        """
+        S = s + s
+
+        return True if S[1:-1].find(s) != -1 else False
+        
+
+
