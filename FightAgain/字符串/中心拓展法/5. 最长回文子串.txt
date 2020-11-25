@@ -18,6 +18,8 @@
 思路1
 动态规划，dp[j][i] 表示字符串从 j 到 i 是否是为回文串，即当 s[j] == s[i] 如果 dp[j+1][i-1] 也是回文串，那么字符串从 j 到 i 也是回文串，即 dp[j][i] 为真。
 
+思路2
+中心扩散，从每一个位置出发，向两边扩散即可。遇到不是回文的时候结束。具体的，当前位置为cur，左边的元素为left=cur-1，右边的元素为right=cur+1，假如s[cur] = s[left]，继续左移,left--，s[right]=s[cur]，继续右移,right++，直到s[cur]和s[left]与s[right]都不相等时，再判断s[left]与s[right]是否相等，相等的话，同时移动left和right，不相等则退出，注意在处理每个元素时保留最大的回文子串。
 
 # 代码
 
@@ -37,5 +39,37 @@ class Solution(object):
                     dp[j][i] = 1
                     res = max(res, s[j:i+1], key=len)
         return res
+
+思路2
+class Solution(object):
+    def longestPalindrome(self, s):
+        """
+        :type s: str
+        :rtype: str
+        """
+        if not s or len(s) == 1:
+            return s
+        res = ''
+        max_length = 0
+        for i in range(len(s)):
+            left = i - 1
+            right = i + 1
+            length = 1
+            while left >= 0 and s[left] == s[i]:
+                left -= 1
+                length += 1
+            while right < len(s) and s[right] == s[i]:
+                right += 1
+                length += 1
+            while left >= 0 and right < len(s) and s[right] == s[left]:
+                left -= 1
+                right += 1
+                length += 2
+            if length > max_length:
+                max_length = length
+                res = s[left+1:right]
+        return res
+            
+
         
         
