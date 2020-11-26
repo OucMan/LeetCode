@@ -1,0 +1,46 @@
+# 题目
+
+你需要找到由两个 n 位数的乘积组成的最大回文数。
+
+由于结果会很大，你只需返回最大回文数 mod 1337得到的结果。
+
+示例:
+
+输入: 2
+
+输出: 987
+
+解释: 99 x 91 = 9009, 9009 % 1337 = 987
+
+说明:
+
+n 的取值范围为 [1,8]。
+
+# 思路
+
+暴力法，首先n位数的范围为 [(10 ^ n - 1) // 10 + 1, 10 ^ n - 1]，我们从大到小构造回文数，然后判断该书能否由两个n位数相乘得到，还是从最大的n位数开始，测试是否可以被整除，这里要保证两个最大值相乘大于等于该回文数，这样才能找到符合条件的两个n位数，假如两个最大的n位数乘积都小于该回文数，则不可能找到符合条件的两个n位数。
+
+
+# 代码
+
+class Solution(object):
+    def largestPalindrome(self, n):
+        """
+        :type n: int
+        :rtype: int
+        """
+        if n == 1: return 9
+
+        i = max_value = 10 ** n - 1
+        while i > max_value // 10:
+            s = str(i) + str(i)[::-1]
+            chengji = int(s)
+            j = max_value
+            while j * j >= chengji:
+                if chengji % j == 0:
+                    return chengji % 1337
+                j -= 1
+            i -= 1
+        return -1
+        
+        
