@@ -1,0 +1,49 @@
+# 题目
+
+
+# 思路
+
+思路1：迭代，参考2的幂（题231）
+
+思路2：对数运算，换底公式
+
+log3(x) = log10(x) / log10(3)
+
+注：通过模1来判断是否为整数
+
+# 代码
+
+思路1
+
+class Solution(object):
+    def isPowerOfThree(self, n):
+        """
+        :type n: int
+        :rtype: bool
+        """
+        if n <= 0:
+            return False
+        if n == 1:
+            return True
+        while n > 1:
+            if n % 3 != 0:
+                return False
+            n = n // 3
+        return True
+        
+思路2
+
+import math
+
+class Solution(object):
+    def isPowerOfThree(self, n):
+        """
+        :type n: int
+        :rtype: bool
+        """
+        if n <= 0:
+            return False
+        else:
+            return (math.log10(n) / math.log10(3)) % 1 == 0
+            
+            
