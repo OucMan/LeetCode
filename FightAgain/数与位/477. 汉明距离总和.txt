@@ -1,0 +1,53 @@
+# 题目
+
+
+两个整数的 汉明距离 指的是这两个数字的二进制数对应位不同的数量。
+
+计算一个数组中，任意两个数之间汉明距离的总和。
+
+示例:
+
+输入: 4, 14, 2
+
+输出: 6
+
+解释: 在二进制表示中，4表示为0100，14表示为1110，2表示为0010。（这样表示是为了体现后四位之间关系）
+所以答案为：
+HammingDistance(4, 14) + HammingDistance(4, 2) + HammingDistance(14, 2) = 2 + 2 + 2 = 6.
+注意:
+
+数组中元素的范围为从 0到 10^9。
+数组的长度不超过 10^4。
+
+# 思路
+
+这个思路比较巧妙，首先将每一个数字转成长度相等的二进制，如'{:032b}'.format(x)，然后对每一位进行遍历，比如同时查询第i位上所有整数的0,1情况，比如对于n个整数，有t个整数i位上为0，则（n-t）个整数上第i位上为1，那么在该位上，两两元素汉明距离明显为(n-t) * t,将所有位上的情况得到直接相加就行。
+
+https://leetcode-cn.com/problems/total-hamming-distance/solution/yi-ming-ju-chi-zong-he-by-leetcode/
+
+
+# 代码
+
+class Solution(object):
+    def totalHammingDistance(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: int
+        """
+        if not nums or len(nums) < 2:
+            return 0
+        
+        res = 0
+        bins = ['{:032b}'.format(x) for x in nums]
+        for i in range(32):
+            one, zero = 0, 0
+            for b in bins:
+                if b[i] == '1':
+                    one += 1
+                elif b[i] == '0':
+                    zero += 1
+            res += one * zero
+        
+        return res
+
+
