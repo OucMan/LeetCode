@@ -1,0 +1,46 @@
+# 题目
+
+
+# 思路
+
+ 异或运算，101与111异或等于010，即是101的反码，正整数的补码，该问题的重点是‘1’的长度
+
+思路1
+
+按照字符串的操作获得整数二进制的长度，即为‘1’的长度
+
+思路2
+
+移位，初始为n=1，当n<=num时，n左移一位，得到n是最短的1000...，n-1即为和num一样长的1111...
+
+
+# 代码
+
+思路1
+
+class Solution(object):
+    def findComplement(self, num):
+        """
+        :type num: int
+        :rtype: int
+        """
+
+        bin_len = len(bin(num)[2:])
+        return num ^ int('1' * bin_len, base=2)
+        
+思路2
+
+class Solution(object):
+    def findComplement(self, num):
+        """
+        :type num: int
+        :rtype: int
+        """
+
+        n = 1
+        while n <= num:
+            n = n << 1
+        return (n-1) ^ num
+        
+        
+        
