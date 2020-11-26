@@ -31,10 +31,12 @@
 
 # 思路
 
-参看2的幂（题231）
-
+思路1， 迭代，参看2的幂（题231）
+思路2，位运算，整数的二进制表示只有一个1，而且1的位置为偶数位（从右向左数），我们可以通过与0xaaaaaaaa是否等于0来判断
 
 # 代码
+
+思路1
 
 class Solution(object):
     def isPowerOfFour(self, n):
@@ -53,3 +55,13 @@ class Solution(object):
             n = n // 4
         
         return True
+思路2
+
+class Solution(object):
+    def isPowerOfFour(self, n):
+        """
+        :type n: int
+        :rtype: bool
+        """
+        return n > 0 and n & (n-1) == 0 and n & 0xaaaaaaaa == 0
+        
