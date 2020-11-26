@@ -20,13 +20,19 @@
 
 # 思路
 
-迭代，
+思路1，迭代，
 
 if x % 2 != 0：
     return False
 x = x // 2
 
+思路2，位运算
+
+n 大于 0, 并且n的二进制中只有一个1，即n > 0 and n & (n-1) == 0 
+
 # 代码
+
+思路1
 
 class Solution(object):
     def isPowerOfTwo(self, n):
@@ -46,4 +52,14 @@ class Solution(object):
         
         return True
 
+思路2
+
+class Solution(object):
+    def isPowerOfTwo(self, n):
+        """
+        :type n: int
+        :rtype: bool
+        """
+        return n > 0 and n & (n-1) == 0
+        
 
