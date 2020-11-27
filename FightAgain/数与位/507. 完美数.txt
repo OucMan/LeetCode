@@ -1,0 +1,28 @@
+# 题目
+
+
+# 思路
+
+枚举
+
+# 代码
+
+class Solution(object):
+    def checkPerfectNumber(self, num):
+        """
+        :type num: int
+        :rtype: bool
+        """
+        if num == 1:
+            return False
+
+        n = int(sqrt(num))
+        tmp = 0
+        for i in range(2, n + 1):
+            if num % i == 0:
+                if num != i * i:
+                    tmp = tmp + i + num / i
+                else:
+                    tmp += num / i
+        
+        return tmp + 1 == num
