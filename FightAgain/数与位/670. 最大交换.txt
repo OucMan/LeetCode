@@ -1,0 +1,43 @@
+# 题目
+
+给定一个非负整数，你至多可以交换一次数字中的任意两位。返回你能得到的最大值。
+
+示例 1 :
+
+输入: 2736
+输出: 7236
+解释: 交换数字2和数字7。
+示例 2 :
+
+输入: 9973
+输出: 9973
+解释: 不需要交换。
+注意:
+
+给定数字的范围是 [0, 108]
+
+
+# 思路
+
+找到最右边的最大数，与最左边的非最大数交换即可
+
+# 代码
+
+class Solution(object):
+    def maximumSwap(self, num):
+        """
+        :type num: int
+        :rtype: int
+        """
+        if num < 10:
+            return num
+        num_list = list(map(int, list(str(num))))
+        for i in range(len(num_list)):
+            for j in range(len(num_list)-1, i, -1):
+                if num_list[j] > num_list[i] and num_list[j] == max(num_list[i+1:]):
+                    num_list[i], num_list[j] = num_list[j], num_list[i]
+                    tmp = list(map(str, num_list))
+                    return int(''.join(tmp))
+        return num
+        
+        
