@@ -32,10 +32,17 @@
 
 # 思路
 
+思路1
+
 栈：左括号直接入栈，右括号与栈顶比对
 
+思路2
+
+循环将各种括号对替换成空串，查看最终的串是否为空
 
 # 代码
+
+思路1
 
 class Solution(object):
     def isValid(self, s):
@@ -63,5 +70,25 @@ class Solution(object):
                 stack.pop()
         
         return not stack
+        
+  思路2 
+  
+  class Solution(object):
+    def isValid(self, s):
+        """
+        :type s: str
+        :rtype: bool
+        """
+        if not s:
+            return True
+        
+        while '()' in s or '[]' in s or '{}' in s:
+            if '()' in s:
+                s = s.replace('()', '')
+            if '[]' in s:
+                s = s.replace('[]', '')
+            if '{}' in s:
+                s = s.replace('{}', '')
+        return not s
         
         
