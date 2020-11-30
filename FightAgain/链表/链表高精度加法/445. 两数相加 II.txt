@@ -1,0 +1,61 @@
+# 题目
+
+给你两个 非空 链表来代表两个非负整数。数字最高位位于链表开始位置。它们的每个节点只存储一位数字。将这两数相加会返回一个新的链表。
+
+你可以假设除了数字 0 之外，这两个数字都不会以零开头。
+
+进阶：
+
+如果输入链表不能修改该如何处理？换句话说，你不能对列表中的节点进行翻转。
+
+
+示例：
+
+输入：(7 -> 2 -> 4 -> 3) + (5 -> 6 -> 4)
+输出：7 -> 8 -> 0 -> 7
+
+
+
+# 思路
+
+因为链表是从高位到低位保存数字，但是计算加法是从低位到高位来算，因此采用栈来保存数的每一位，然后弹出栈顶元素来计算结果，注意进位
+
+# 代码
+
+# Definition for singly-linked list.
+# class ListNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
+
+class Solution(object):
+    def addTwoNumbers(self, l1, l2):
+        """
+        :type l1: ListNode
+        :type l2: ListNode
+        :rtype: ListNode
+        """
+        if not l1:
+            return l2
+        if not l2:
+            return l1
+        s1, s2 = [], []
+        while l1:
+            s1.append(l1.val)
+            l1 = l1.next
+        while l2:
+            s2.append(l2.val)
+            l2 = l2.next
+        jinwei = 0
+        res = None
+        while s1 or s2 or jinwei > 0:
+            a = 0 if not s1 else s1.pop()
+            b = 0 if not s2 else s2.pop()
+            tmp = (a + b + jinwei) % 10
+            jinwei = (a + b + jinwei) // 10
+            node = ListNode(tmp)
+            node.next = res
+            res = node
+        return res
+        
+        
