@@ -1,0 +1,63 @@
+# 题目
+
+反转从位置 m 到 n 的链表。请使用一趟扫描完成反转。
+
+说明:
+1 ≤ m ≤ n ≤ 链表长度。
+
+示例:
+
+输入: 1->2->3->4->5->NULL, m = 2, n = 4
+输出: 1->4->3->2->5->NULL
+
+
+# 思路
+
+有可能是从首部开始反转，因此创建伪首部，然后找到m节点的前一个节点，从m个节点到n个节点开始反转，并记录下n节点的后一个节点，就是在这几个节点之间设置指针。
+
+
+
+# 代码
+
+# Definition for singly-linked list.
+# class ListNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
+
+class Solution(object):
+    def reverseBetween(self, head, m, n):
+        """
+        :type head: ListNode
+        :type m: int
+        :type n: int
+        :rtype: ListNode
+        """
+        if not head or not head.next or m == n:
+            return head
+        pre = new_head = ListNode(-1)
+        new_head.next = head
+        tmp = m
+        while m > 1:
+            pre = pre.next
+            m -= 1
+        m = tmp
+        # pre保存的是m节点的前一个节点
+        start = pre.next
+        end = start.next
+        # 实施反转
+        while m < n:
+            next_node = end.next
+            end.next = start
+            start = end
+            end = next_node
+            m += 1
+        # 退出时，start指向旋转的最后一个元素，end指向后面未旋转的第一个节点
+        # 将旋转后的链表插入到原链表中
+        pre.next.next = end
+        pre.next = start
+
+        return new_head.next
+        
+
+
