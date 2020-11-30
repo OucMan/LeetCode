@@ -1,0 +1,93 @@
+# 题目
+
+给你一个嵌套的整型列表。请你设计一个迭代器，使其能够遍历这个整型列表中的所有整数。
+
+列表中的每一项或者为一个整数，或者是另一个列表。其中列表的元素也可能是整数或是其他列表。
+
+ 
+
+示例 1:
+
+输入: [[1,1],2,[1,1]]
+输出: [1,1,2,1,1]
+解释: 通过重复调用 next 直到 hasNext 返回 false，next 返回的元素的顺序应该是: [1,1,2,1,1]。
+示例 2:
+
+输入: [1,[4,[6]]]
+输出: [1,4,6]
+解释: 通过重复调用 next 直到 hasNext 返回 false，next 返回的元素的顺序应该是: [1,4,6]。
+
+
+# 思路
+
+将所有的数字添加到列表中
+
+递归，首先判断输入是否为NestedInteger列表，如果是，则对每一个元素进行递归解析，如果输入是仅包含数字的NestedInteger对象，则将数字加入到元素列表中，如果输入是包含列表的NestedInteger对象，则对列表对象进行递归处理
+
+# 代码
+
+# """
+# This is the interface that allows for creating nested lists.
+# You should not implement it, or speculate about its implementation
+# """
+#class NestedInteger(object):
+#    def isInteger(self):
+#        """
+#        @return True if this NestedInteger holds a single integer, rather than a nested list.
+#        :rtype bool
+#        """
+#
+#    def getInteger(self):
+#        """
+#        @return the single integer that this NestedInteger holds, if it holds a single integer
+#        Return None if this NestedInteger holds a nested list
+#        :rtype int
+#        """
+#
+#    def getList(self):
+#        """
+#        @return the nested list that this NestedInteger holds, if it holds a nested list
+#        Return None if this NestedInteger holds a single integer
+#        :rtype List[NestedInteger]
+#        """
+
+class NestedIterator(object):
+
+    def __init__(self, nestedList):
+        """
+        Initialize your data structure here.
+        :type nestedList: List[NestedInteger]
+        """
+        self.data = []
+
+        def helper(nest_thing):
+            if not nest_thing: return None
+            if type(nest_thing) == type([]):
+                for item in nest_thing:
+                    helper(item)
+            elif nest_thing.isInteger():
+                self.data.append(nest_thing.getInteger())
+            else:
+                helper(nest_thing.getList())
+        
+        helper(nestedList)
+
+    def next(self):
+        """
+        :rtype: int
+        """
+        return self.data.pop(0)
+
+    def hasNext(self):
+        """
+        :rtype: bool
+        """
+        return self.data != []
+
+        
+
+# Your NestedIterator object will be instantiated and called as such:
+# i, v = NestedIterator(nestedList), []
+# while i.hasNext(): v.append(i.next())
+
+
