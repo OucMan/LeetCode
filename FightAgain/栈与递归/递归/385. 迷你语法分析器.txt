@@ -1,0 +1,135 @@
+# 题目
+
+
+给定一个用字符串表示的整数的嵌套列表，实现一个解析它的语法分析器。
+
+列表中的每个元素只可能是整数或整数嵌套列表
+
+提示：你可以假定这些字符串都是格式良好的：
+
+字符串非空
+字符串不包含空格
+字符串只包含数字0-9、[、-、,、]
+ 
+
+示例 1：
+
+给定 s = "324",
+
+你应该返回一个 NestedInteger 对象，其中只包含整数值 324。
+示例 2：
+
+给定 s = "[123,[456,[789]]]",
+
+返回一个 NestedInteger 对象包含一个有两个元素的嵌套列表：
+
+1. 一个 integer 包含值 123
+2. 一个包含两个元素的嵌套列表：
+    i.  一个 integer 包含值 456
+    ii. 一个包含一个元素的嵌套列表
+         a. 一个 integer 包含值 789
+
+
+# 思路
+
+栈
+
+首先判断字符串第一个元素是不是[，如果不是，则证明字符串中只有一个数字，直接返回就好，否则遍历字符串
+
+当遇到数字，累积数字
+
+当遇到负号，标记负号
+
+当遇到【,说明一个新的NestedInteger对象出现，因此初始化NestedInteger对象，然后入栈
+
+当遇到】或者逗号，如果前面的元素是数字，则弹出栈顶的NestedInteger对象，将数字添加进去。如果是]，则说明一个NestedInteger对象的结束，假如此时栈的长度大于1，则将栈顶对象添加到栈的第二元素中，完成合并。
+
+最后返回栈中唯一的一个元素
+
+
+# 代码
+
+# """
+# This is the interface that allows for creating nested lists.
+# You should not implement it, or speculate about its implementation
+# """
+#class NestedInteger(object):
+#    def __init__(self, value=None):
+#        """
+#        If value is not specified, initializes an empty list.
+#        Otherwise initializes a single integer equal to value.
+#        """
+#
+#    def isInteger(self):
+#        """
+#        @return True if this NestedInteger holds a single integer, rather than a nested list.
+#        :rtype bool
+#        """
+#
+#    def add(self, elem):
+#        """
+#        Set this NestedInteger to hold a nested list and adds a nested integer elem to it.
+#        :rtype void
+#        """
+#
+#    def setInteger(self, value):
+#        """
+#        Set this NestedInteger to hold a single integer equal to value.
+#        :rtype void
+#        """
+#
+#    def getInteger(self):
+#        """
+#        @return the single integer that this NestedInteger holds, if it holds a single integer
+#        Return None if this NestedInteger holds a nested list
+#        :rtype int
+#        """
+#
+#    def getList(self):
+#        """
+#        @return the nested list that this NestedInteger holds, if it holds a nested list
+#        Return None if this NestedInteger holds a single integer
+#        :rtype List[NestedInteger]
+#        """
+class Solution(object):
+    def deserialize(self, s):
+        """
+        :type s: str
+        :rtype: NestedInteger
+        """
+        if s == '':
+            return None
+        if s[0] != '[':
+            return NestedInteger(int(s))
+        
+        stack = []
+        flag = 1
+        num = 0
+        is_num = False
+
+        for c in s:
+            if c.isdigit():
+                num = 10 * num + int(c)
+                is_num = True
+            elif c == '-':
+                flag = -1
+            elif c == '[':
+                stack.append(NestedInteger())
+            elif c == ',' or c == ']':
+                if is_num:
+                    tmp = stack.pop()
+                    tmp.add(NestedInteger(flag * num))
+                    stack.append(tmp)
+                    is_num = False
+                    num = 0
+                    flag = 1
+                if len(stack) > 1 and c == ']':
+                    tmp = stack.pop()
+                    stack[-1].add(tmp)
+        
+        return stack[0]
+            
+
+
+
+
