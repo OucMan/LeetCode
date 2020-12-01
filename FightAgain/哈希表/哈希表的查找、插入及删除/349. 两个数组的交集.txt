@@ -1,0 +1,49 @@
+# 题目
+
+给定两个数组，编写一个函数来计算它们的交集。
+
+ 
+
+示例 1：
+
+输入：nums1 = [1,2,2,1], nums2 = [2,2]
+输出：[2]
+示例 2：
+
+输入：nums1 = [4,9,5], nums2 = [9,4,9,8,4]
+输出：[9,4]
+ 
+
+说明：
+
+输出结果中的每个元素一定是唯一的。
+我们可以不考虑输出结果的顺序。
+
+
+
+# 思路
+
+借助字典，首先遍历第一个列表，对于存在的元素，字典中设置为1,即d[num] = 1，然后遍历第二个列表，如果元素再字典中，并且d[num]=1，则记录到结果列表中，并将字典修改为d[num]=0，表示，该元素已经记录过。
+
+
+# 代码
+
+class Solution(object):
+    def intersection(self, nums1, nums2):
+        """
+        :type nums1: List[int]
+        :type nums2: List[int]
+        :rtype: List[int]
+        """
+        tabels = {}
+        for n in nums1:
+            if n not in tabels:
+                tabels[n] = 1
+        res = []
+        for n in nums2:
+            if n in tabels and tabels[n] == 1:
+                res.append(n)
+                tabels[n] = 0
+        
+        return res
+
