@@ -1,0 +1,48 @@
+# 题目
+
+
+# 思路
+
+思路1
+
+双指针
+
+思路2
+
+暴力
+
+# 代码
+
+思路1
+
+class Solution(object):
+    def judgeSquareSum(self, c):
+        """
+        :type c: int
+        :rtype: bool
+        """
+        start, end = 0, int(sqrt(c))
+        while start <= end:
+            if start ** 2 + end ** 2 == c:
+                return True
+            elif start ** 2 + end ** 2 > c:
+                end -= 1
+            elif start ** 2 + end ** 2 < c:
+                start += 1
+        return False
+        
+思路2
+
+class Solution(object):
+    def judgeSquareSum(self, c):
+        """
+        :type c: int
+        :rtype: bool
+        """
+        for i in range(int(sqrt(c))+1):
+            if sqrt(c - i ** 2) == int(sqrt(c - i ** 2)):
+                return True
+        
+        return False
+        
+        
