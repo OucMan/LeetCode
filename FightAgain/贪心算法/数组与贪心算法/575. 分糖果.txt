@@ -1,0 +1,52 @@
+# 题目
+
+
+# 思路
+
+思路1
+
+借助字典保存每种糖的个数，优先给妹妹分不同种类的糖
+
+思路2
+
+如果糖的种类大于等于糖数量的一半，那么妹妹可以每一种糖一个，得到糖数量的一半的种类；如果糖的种类小于糖数量的一半，我们优先为妹妹分配新的种类，因此妹妹可以获得全部的糖的种类
+
+
+# 代码
+
+思路1
+
+from collections import Counter
+
+class Solution(object):
+    def distributeCandies(self, candyType):
+        """
+        :type candyType: List[int]
+        :rtype: int
+        """
+
+        candy = Counter(candyType)
+        sis_can = []
+        sis_can_num = len(candyType) // 2
+
+        for c in candy:
+            if candy[c] > 0 and len(sis_can) < sis_can_num:
+                sis_can.append(c)
+        
+        return len(sis_can)
+
+
+思路2
+
+
+from collections import Counter
+
+class Solution(object):
+    def distributeCandies(self, candyType):
+        """
+        :type candyType: List[int]
+        :rtype: int
+        """
+        return min(len(list(set(candyType))), len(candyType) // 2)
+
+
