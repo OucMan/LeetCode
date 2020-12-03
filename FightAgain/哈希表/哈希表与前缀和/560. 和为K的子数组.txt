@@ -1,0 +1,43 @@
+# 题目
+
+给定一个整数数组和一个整数 k，你需要找到该数组中和为 k 的连续的子数组的个数。
+
+示例 1 :
+
+输入:nums = [1,1,1], k = 2
+输出: 2 , [1,1] 与 [1,1] 为两种不同的情况。
+说明 :
+
+数组的长度为 [1, 20,000]。
+数组中元素的范围是 [-1000, 1000] ，且整数 k 的范围是 [-1e7, 1e7]。
+
+
+# 思路
+
+接住数组num_times来保存前缀和（0到某一位置的连续子串之和）以及其出现的次数，比如num_times[m] = n的意思就是前缀和为m的子串有n个。因此当遍历到i元素时，前缀和为cur_sum，我们只需要查看cur_sum-k这个数字是多少子串的前缀和，既能够得到对应有连续子串（终点为i元素）的和为k。
+
+# 代码
+
+import collections
+
+class Solution(object):
+    def subarraySum(self, nums, k):
+        """
+        :type nums: List[int]
+        :type k: int
+        :rtype: int
+        """
+        num_times = collections.defaultdict(int)
+        num_times[0] = 1
+        cur_sum = 0
+        res = 0
+        for i in range(len(nums)):
+            cur_sum += nums[i]
+            if (cur_sum - k) in num_times:
+                res += num_times[cur_sum - k]
+            num_times[cur_sum] += 1
+
+        return res 
+
+
+
