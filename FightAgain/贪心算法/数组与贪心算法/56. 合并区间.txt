@@ -39,10 +39,10 @@ class Solution(object):
         
         res = []
 
-        intervals.sort(cmp=self.mysort)
+        intervals.sort(key=lambda x: x[0])
+
         start = intervals[0][0]
         end = intervals[0][1]
-
         for item in intervals[1:]:
             if item[0] > end:
                 res.append([start, end])
@@ -53,10 +53,5 @@ class Solution(object):
         res.append([start, end])
         return res
 
-
-    def mysort(self, a, b):
-        if a[0] > b[0] or a[0] == b[0] and a[1] > b[1]:
-            return 1
-        return -1
         
 
