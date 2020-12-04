@@ -1,0 +1,115 @@
+# 题目
+
+
+# 思路
+
+思路1
+
+列表中插入新的元素，然后按照起始位置排序，接着合并区间，像题56
+
+思路2
+
+列表本来就是有序的，找到插入位置，并且然后再合并，题56
+
+思路3
+
+遍历列表区间，如果newInterval左侧在区间的右侧，则直接将区间添加进结果列表，如果newInterval与区间有交集，则更新newInterval，直到没有相交为止，同时将newInterval添加进结果列表，接着将后面的区间一次添加进结果列表，因为后面的不会和newInterval有交集。
+
+# 代码
+
+思路1
+
+class Solution(object):
+    def insert(self, intervals, newInterval):
+        """
+        :type intervals: List[List[int]]
+        :type newInterval: List[int]
+        :rtype: List[List[int]]
+        """
+        intervals.append(newInterval)
+        intervals.sort(key=lambda x: x[0])
+        
+        start = intervals[0][0]
+        end = intervals[0][1]
+
+        res = []
+        for item in intervals[1:]:
+            if item[0] > end:
+               res.append([start, end])
+               start, end = item[0], item[1]
+            else:
+                end = max(end, item[1])
+        res.append([start, end])
+        return res 
+
+
+思路2
+
+class Solution(object):
+    def insert(self, intervals, newInterval):
+        """
+        :type intervals: List[List[int]]
+        :type newInterval: List[int]
+        :rtype: List[List[int]]
+        """
+        if not intervals:
+            return [newInterval]
+        i = 0
+        while i < len(intervals):
+            if newInterval[0] <= intervals[i][0]:
+                intervals.insert(i, newInterval)
+                break
+            i += 1
+        if i == len(intervals):
+            intervals.append(newInterval)
+        
+        start = intervals[0][0]
+        end = intervals[0][1]
+
+        res = []
+        for item in intervals[1:]:
+            if item[0] > end:
+               res.append([start, end])
+               start, end = item[0], item[1]
+            else:
+                end = max(end, item[1])
+        res.append([start, end])
+        return res 
+
+思路3
+
+class Solution(object):
+    def insert(self, intervals, newInterval):
+        """
+        :type intervals: List[List[int]]
+        :type newInterval: List[int]
+        :rtype: List[List[int]]
+        """
+        res = []
+        n, i = len(intervals), 0
+
+        while i < n and intervals[i][1] < newInterval[0]:
+            res.append(intervals[i])
+            i += 1
+        
+        while i < n and self.jiaoji(newInterval, intervals[i]):
+            newInterval = [min(newInterval[0], intervals[i][0]), max(newInterval[1], intervals[i][1])]
+            i += 1
+        res.append(newInterval)
+
+        while i < n:
+            res.append(intervals[i])
+            i += 1
+        
+        return res
+
+
+    def jiaoji(self, a, b):
+        if a[1] < b[0] or a[0] > b[1]:
+            return False
+        return True
+        
+        
+
+
+
