@@ -19,13 +19,25 @@
 
 # 思路
 
+思路1： 贪心
+
 用两个变量 r1, r2 分别记录第一小和第二小的数。然后遍历 nums。只要碰到比 r1 小的数我们就替换掉 r1，碰到比 r1 大但比 r2 小的数就替换 r2。
 只要碰到比 r2 大的数就已经满足题意了。
 
 大神 
 https://leetcode-cn.com/problems/increasing-triplet-subsequence/solution/jian-dan-hao-dong-yi-shi-xian-yi-ci-xun-huan-guo-b/
 
+思路2：动态规划
+
+dp[i]表示以nums[i]结尾的最长递增子序列的长度。
+
+dp[i] = max(dp[i], dp[j]+1),其中nums[j]为i之前的任一元素，并且nums[j] < nums[i]
+
+
+
 # 代码
+
+思路1
 
 class Solution(object):
     def increasingTriplet(self, nums):
@@ -44,5 +56,26 @@ class Solution(object):
             else:
                 return True
         return False 
+        
+思路2
+
+class Solution(object):
+    def increasingTriplet(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: bool
+        """
+        if not nums or len(nums) < 3:
+            return False
+        n = len(nums)
+        dp = [1] * n
+        for i in range(n):
+            for j in range(i):
+                if nums[j] < nums[i]:
+                    dp[i] = max(dp[i], dp[j]+1)
+        for i in dp:
+            if i >= 3:
+                return True
+        return False
         
         
