@@ -1,0 +1,43 @@
+# 题目
+
+给定一个非空字符串 s，最多删除一个字符。判断是否能成为回文字符串。
+
+示例 1:
+
+输入: "aba"
+输出: True
+示例 2:
+
+输入: "abca"
+输出: True
+解释: 你可以删除c字符。
+注意:
+
+字符串只包含从 a-z 的小写字母。字符串的最大长度是50000。
+
+
+# 思路
+
+设置头尾指针，如果两个指针指向的元素相同，那么同时向中间靠拢，当不相等时，那么就查看两指针之间的字符串，当去掉某一个端点（指针指向的元素）是否可以是回文串
+
+
+# 代码
+
+class Solution(object):
+    def validPalindrome(self, s):
+        """
+        :type s: str
+        :rtype: bool
+        """
+        if not s or len(s) == 1:
+            return True
+        
+        l, r = 0, len(s)-1
+        while l < r:
+            if s[l] != s[r]:
+                return s[l:r] == s[l:r][::-1] or s[l+1:r+1] == s[l+1:r+1][::-1]
+            l += 1
+            r -= 1
+        return True
+        
+        
