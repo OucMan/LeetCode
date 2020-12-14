@@ -1,0 +1,57 @@
+# 题目
+
+编写一个程序，找到两个单链表相交的起始节点。
+
+
+# 思路
+
+可以使用栈
+
+或者
+
+先求两个链表的长度差，长度长的那个链表提前走长度差步，然后两个链表一起向后移动，直到两个节点相等，如果始终不相等，则为空
+
+# 代码
+
+# Definition for singly-linked list.
+# class ListNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
+
+class Solution(object):
+    def getIntersectionNode(self, headA, headB):
+        """
+        :type head1, head1: ListNode
+        :rtype: ListNode
+        """
+        if not headA or not headB:
+            return None
+
+        la, tmp = 0, headA
+        while tmp:
+            la += 1
+            tmp = tmp.next
+        
+        lb, tmp = 0, headB
+        while tmp:
+            lb += 1
+            tmp = tmp.next
+        
+        i = 0
+        if la > lb:
+            while i < la - lb:
+                headA = headA.next
+                i += 1
+        else:
+            while i < lb - la:
+                headB = headB.next
+                i += 1
+        while headA and headB:
+            if headB == headA:
+                return headA
+            headA = headA.next
+            headB = headB.next
+        
+        return None
+
