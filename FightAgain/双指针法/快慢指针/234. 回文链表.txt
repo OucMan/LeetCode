@@ -1,0 +1,67 @@
+# 题目
+
+请判断一个链表是否为回文链表。
+
+示例 1:
+
+输入: 1->2
+输出: false
+示例 2:
+
+输入: 1->2->2->1
+输出: true
+进阶：
+你能否用 O(n) 时间复杂度和 O(1) 空间复杂度解决此题？
+
+
+# 思路
+
+使用快慢指针将原链表折半
+
+后半部分链表倒序
+
+两个链表一一比较
+
+# 代码
+
+# Definition for singly-linked list.
+# class ListNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
+
+class Solution(object):
+    def isPalindrome(self, head):
+        """
+        :type head: ListNode
+        :rtype: bool
+        """
+        if not head or not head.next:
+            return True
+
+        first = slow = fast = head
+        
+        while fast.next and fast.next.next:
+            fast, slow = fast.next.next, slow.next
+        
+        second = slow.next
+        slow.next = None
+
+        pre = None
+        while second:
+            tmp = second.next
+            second.next = pre
+            pre = second
+            second = tmp
+
+        second = pre
+
+        while second:
+            if second.val != first.val:
+                return False
+            second = second.next
+            first = first.next
+        
+        return True
+
+
