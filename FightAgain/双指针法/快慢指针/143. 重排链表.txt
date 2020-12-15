@@ -1,0 +1,75 @@
+# 题目
+
+给定一个单链表 L：L0→L1→…→Ln-1→Ln ，
+将其重新排列后变为： L0→Ln→L1→Ln-1→L2→Ln-2→…
+
+你不能只是单纯的改变节点内部的值，而是需要实际的进行节点交换。
+
+示例 1:
+
+给定链表 1->2->3->4, 重新排列为 1->4->2->3.
+示例 2:
+
+给定链表 1->2->3->4->5, 重新排列为 1->5->2->4->3.
+
+
+# 思路
+
+首先使用快慢指针将链表对半拆开
+
+然后将后面的半部分链表倒叙
+
+然后将前后两个链表合并
+
+
+# 代码
+
+# Definition for singly-linked list.
+# class ListNode(object):
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+class Solution(object):
+    def reorderList(self, head):
+        """
+        :type head: ListNode
+        :rtype: None Do not return anything, modify head in-place instead.
+        """
+        if not head or not head.next:
+            return head
+        first = cur = head
+        slow = self.split_lian(head)
+        second = slow.next
+        slow.next = None
+        second = self.reverse_lian(second)
+
+        while second:
+            tmp = cur.next
+            tmp2 = second.next
+            cur.next = second
+            second.next = tmp
+            cur = tmp
+            second = tmp2
+        
+        return first
+    
+    def split_lian(self, head):
+        first = slow = fast = head
+        while fast.next and fast.next.next:
+            slow = slow.next
+            fast = fast.next.next
+        return slow
+
+    
+    def reverse_lian(self, head):
+        if not head or not head.next:
+            return head
+        n = None
+        while head:
+            tmp = head.next
+            head.next = n
+            n = head
+            head = tmp
+        return n
+
+
