@@ -1,0 +1,91 @@
+# 题目
+
+编写一个程序，通过填充空格来解决数独问题。
+
+一个数独的解法需遵循如下规则：
+
+数字 1-9 在每一行只能出现一次。
+数字 1-9 在每一列只能出现一次。
+数字 1-9 在每一个以粗实线分隔的 3x3 宫内只能出现一次。
+空白格用 '.' 表示。
+
+答案被标成红色。
+
+提示：
+
+给定的数独序列只包含数字 1-9 和字符 '.' 。
+你可以假设给定的数独只有唯一解。
+给定数独永远是 9x9 形式的。
+
+# 思路
+
+回溯
+
+首先定义几个辅助函数，isvaild用来检测在board中的某一位置放置value是否有效；get_next_pos根据当前位置，找到下一个需要处理的位置，没有需要处理的位置时，返回[-1,-1]
+
+回溯函数
+
+回溯本质就是递归
+
+递归的出口：当位置为[-1,-1]时，说明已经处理完，返回True即可
+
+递归的参数：board以及位置
+
+递归的逻辑：首先检测当前位置是不是[-1,-1]。当当前的位置中保存的元素是‘.’，以此向该位置尝试假如1~9的数，并判断某一数值是否可以放在该位置，能够放置的话，那么更新board，然后得到下一个要处理的位置，接着递归调用函数，如果该函数返回值为True，则当前函数也返回True，如果递归函数不返回True，则回溯baord，重新设置值。
+
+
+
+# 代码
+
+class Solution(object):
+    def solveSudoku(self, board):
+        """
+        :type board: List[List[str]]
+        :rtype: None Do not return anything, modify board in-place instead.
+        """
+        def isvaild(pos, value, board):
+            row = board[pos[0]]
+            col = list(zip(*board)[pos[1]])
+            if value in row or value in col:
+                return False
+            area_x = pos[0] // 3 * 3
+            area_y = pos[1] // 3 * 3
+            for i in range(area_x, area_x+3):
+                for j in range(area_y, area_y+3):
+                    if board[i][j] == value:
+                        return False
+            return True
+        
+        def get_next_pos(board, pos):
+            x, y = pos[0], pos[1]
+            size = len(board)
+            while board[x][y] != '.':
+                y += 1
+                if y >= size:
+                    x += 1
+                    y = 0
+                if x >= size:
+                    return [-1, -1]
+            return [x, y]
+        
+        def back(board, pos):
+            if pos == [-1, -1]:
+                return True
+            x = pos[0]
+            y = pos[1]
+            if board[x][y] == '.':
+                for i in range(1, 10):
+                    v = str(i)
+                    if isvaild(pos, v, board):
+                        board[x][y] = v
+                        next_pos = get_next_pos(board, pos)
+                        if back(board, next_pos):
+                            return True
+                        else:
+                            board[x][y] = '.'
+            else:
+                next_pos = get_next_pos(board, pos)
+                back(board, next_pos)
+
+        back(board, [0, 0])
+
