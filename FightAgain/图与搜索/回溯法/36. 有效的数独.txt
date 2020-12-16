@@ -1,0 +1,43 @@
+# 题目
+
+判断一个 9x9 的数独是否有效。只需要根据以下规则，验证已经填入的数字是否有效即可。
+
+数字 1-9 在每一行只能出现一次。
+数字 1-9 在每一列只能出现一次。
+数字 1-9 在每一个以粗实线分隔的 3x3 宫内只能出现一次。
+
+
+
+# 思路
+
+直接按照三个条件进行判断即可
+
+# 代码
+
+class Solution(object):
+    def isValidSudoku(self, board):
+        """
+        :type board: List[List[str]]
+        :rtype: bool
+        """
+        def isvaild(data):
+            data = [x for x in data if x != '.']
+            return len(data) == len(set(data))
+        
+        for data in board: # 行
+            if not isvaild(data):
+                return False
+        
+        for data in zip(*board): # 列
+            if not isvaild(list(data)):
+                return False
+        
+        for row in range(3): # 方格
+            for col in range(3):
+                tmp = [board[i][j] for i in range(row*3, row*3+3) for j in range(col*3, col*3+3)]
+                if not isvaild(tmp):
+                    return False
+        
+        return True
+        
+
