@@ -1,0 +1,68 @@
+# 题目
+
+假设有从 1 到 N 的 N 个整数，如果从这 N 个数字中成功构造出一个数组，使得数组的第 i 位 (1 <= i <= N) 满足如下两个条件中的一个，我们就称这个数组为一个优美的排列。条件：
+
+第 i 位的数字能被 i 整除
+i 能被第 i 位上的数字整除
+现在给定一个整数 N，请问可以构造多少个优美的排列？
+
+示例1:
+
+输入: 2
+输出: 2
+解释: 
+
+第 1 个优美的排列是 [1, 2]:
+  第 1 个位置（i=1）上的数字是1，1能被 i（i=1）整除
+  第 2 个位置（i=2）上的数字是2，2能被 i（i=2）整除
+
+第 2 个优美的排列是 [2, 1]:
+  第 1 个位置（i=1）上的数字是2，2能被 i（i=1）整除
+  第 2 个位置（i=2）上的数字是1，i（i=2）能被 1 整除
+说明:
+
+N 是一个正整数，并且不会超过15。
+
+# 思路
+
+回溯
+
+定义一个全局列表用来表示某一个数是否已经放置，比如visited[i]等于True，说明i已经放置，初始化列表每一个元素都是False，表示1~N的数都是可疑放置的。
+
+定义一个全局变量，用来记录符合要求的排列个数。
+
+回溯本质上就是递归
+
+递归的结束条件（出口）：一般放在递归函数的开头，本题就是只要目前处理的位置大于N，则证明排列已经完成，count+1，退出
+
+递归函数的参数：visited用来表示数字的放置情况，pos表示当前处理的位置
+
+递归函数的逻辑：首先判断pos是否大于N，即是否满足退出条件；然后循环防止1~N的元素，比如放置i，如果i还没有放置，并且符合放置的条件，那么更新visited[i]=True表示i已经放置，接着递归，继续放置下一个位置，该递归完成后，回溯visited[i]=False。
+
+
+# 代码
+
+class Solution(object):
+
+    def countArrangement(self, N):
+        """
+        :type N: int
+        :rtype: int
+        """
+        self.visited = [False] * (N+1)
+        self.count = 0
+
+        def helper(pos, visited):
+            if pos > N:
+                self.count += 1
+                return
+            for i in range(1, N+1):
+                if not visited[i] and (pos % i == 0 or i % pos == 0):
+                    visited[i] = True
+                    helper(pos+1, visited)
+                    visited[i] = False
+        
+        helper(1, self.visited)
+        return self.count
+        
+        
