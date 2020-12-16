@@ -1,0 +1,87 @@
+# 题目
+
+二进制手表顶部有 4 个 LED 代表 小时（0-11），底部的 6 个 LED 代表 分钟（0-59）。
+
+每个 LED 代表一个 0 或 1，最低位在右侧。
+
+例如，上面的二进制手表读取 “3:25”。
+
+给定一个非负整数 n 代表当前 LED 亮着的数量，返回所有可能的时间。
+
+ 
+
+示例：
+
+输入: n = 1
+返回: ["1:00", "2:00", "4:00", "8:00", "0:01", "0:02", "0:04", "0:08", "0:16", "0:32"]
+ 
+
+提示：
+
+输出的顺序没有要求。
+小时不会以零开头，比如 “01:00” 是不允许的，应为 “1:00”。
+分钟必须由两位数组成，可能会以零开头，比如 “10:2” 是无效的，应为 “10:02”。
+超过表示范围（小时 0-11，分钟 0-59）的数据将会被舍弃，也就是说不会出现 "13:00", "0:61" 等时间。
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/binary-watch
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+
+# 思路
+
+回溯
+
+这10个灯看成一个整体，使用一个全局列表保存等的状态（是否开启）
+
+使用一个全局集合保存最终结果
+
+回溯本质上是递归
+
+递归的出口：当前选择的灯数量等于要求的值，那么将选择的灯代表的时间加入到结果集合，退出
+
+递归的参数：灯的开始状态，要求开启的数量，以及当前开启的灯的列表
+
+递归的逻辑：首先判断当前开启的灯的数量是否等于要求的数量；然后循环处理这10个等，比如第i个灯，如果i灯没有开启，那么将其开启，然后递归查看后面的灯，处理完成后将i等关闭
+
+
+# 代码
+
+class Solution(object):
+    def readBinaryWatch(self, num):
+        """
+        :type num: int
+        :rtype: List[str]
+        """
+
+        self.visited = [False] * 10
+        self.res = set()
+        self.table = {0:8, 1:4, 2:2, 3:1, 4:32, 5:16, 6:8, 7:4, 8:2, 9:1}
+
+        def helper(num, choices, visited):
+            if len(choices) == num:
+                t = to_time(choices)
+                if t:
+                    self.res.add(t)
+                return
+            for i in range(10):
+                if not visited[i]:
+                    visited[i] = True
+                    helper(num, choices + [i], visited)
+                    visited[i] = False
+
+        def to_time(choices):
+            hour, minite = 0, 0
+            for c in choices:
+                if c <= 3:
+                    hour += self.table[c]
+                else:
+                    minite += self.table[c]
+            if hour > 11 or minite > 59:
+                return None
+            res = str(hour) + ':'
+            return res + '0' + str(minite) if minite < 10 else res + str(minite)
+        
+        helper(num, [], self.visited)
+        return list(self.res)
+            
+
