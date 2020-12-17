@@ -1,0 +1,41 @@
+# 题目
+
+
+# 思路
+
+回溯
+
+回溯本质上递归
+
+递归出口：组合中所有元素之和等于目标值
+
+递归参数：组合元素集合
+
+递归逻辑：首先查看组合中所有元素之和是否等于目标值；接着循环处理每一个元素，当前元素加上现有组合元素之和小于等于目标值是，递归调用函数
+
+
+# 代码
+
+class Solution(object):
+    def combinationSum(self, candidates, target):
+        """
+        :type candidates: List[int]
+        :type target: int
+        :rtype: List[List[int]]
+        """
+        res = []
+
+        def back(item=[]):
+            if sum(item) == target:
+                item.sort()
+                if item not in res:
+                    res.append(item)
+                return
+            for c in candidates:
+                if c + sum(item) <= target:
+                    back(item + [c])
+        
+        back()
+        return res
+        
+        
