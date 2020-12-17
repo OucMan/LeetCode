@@ -1,0 +1,72 @@
+# 题目
+
+给定一个数组 candidates 和一个目标数 target ，找出 candidates 中所有可以使数字和为 target 的组合。
+
+candidates 中的每个数字在每个组合中只能使用一次。
+
+说明：
+
+所有数字（包括目标数）都是正整数。
+解集不能包含重复的组合。 
+示例 1:
+
+输入: candidates = [10,1,2,7,6,1,5], target = 8,
+所求解集为:
+[
+  [1, 7],
+  [1, 2, 5],
+  [2, 6],
+  [1, 1, 6]
+]
+示例 2:
+
+输入: candidates = [2,5,2,1,2], target = 5,
+所求解集为:
+[
+  [1,2,2],
+  [5]
+]
+
+
+# 思路
+
+回溯
+
+回溯本质就是递归
+
+递归出口：组合元素总和等于目标值
+
+递归参数：当前组合元素，候选集合
+
+递归逻辑：首先判断出口是否成立，然后在候选集中逐一向组合中添加元素，递归调用函数，注意剪枝过程和参数的变更
+
+
+# 代码
+
+class Solution(object):
+    def combinationSum2(self, candidates, target):
+        """
+        :type candidates: List[int]
+        :type target: int
+        :rtype: List[List[int]]
+        """
+        res = []
+
+        def back(can, item = []):
+            if sum(item) == target:
+                item.sort()
+                if item not in res:
+                    res.append(item)
+                return 
+            for i in range(len(can)):
+                if i > 0 and can[i] == can[i-1]: # 剪枝，不然会超时
+                    continue
+                if sum(item) + can[i] <= target:
+                    back(can[i+1:], item + [can[i]])
+        back(candidates)
+        return res
+        
+        
+        
+
+
