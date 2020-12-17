@@ -1,0 +1,50 @@
+# 题目
+
+给定一个32位正整数 n，你需要找到最小的32位整数，其与 n 中存在的位数完全相同，并且其值大于n。如果不存在这样的32位整数，则返回-1。
+
+示例 1:
+
+输入: 12
+输出: 21
+示例 2:
+
+输入: 21
+输出: -1
+
+# 思路
+
+与题31思路相同
+
+
+# 代码
+
+class Solution(object):
+    def nextGreaterElement(self, n):
+        """
+        :type n: int
+        :rtype: int
+        """
+        n = list(map(int, list(str(n))))
+        l = len(n)
+
+        first_index = -1
+        for i in range(l-2, -1, -1):
+            if n[i] < n[i+1]:
+                first_index = i
+                break
+        if first_index == -1:
+            return -1
+        second_index = -1
+        for i in range(l-1, first_index, -1):
+            if n[i] > n[first_index]:
+                second_index = i
+                break
+        
+        n[first_index], n[second_index] = n[second_index], n[first_index]
+        n[first_index+1:] = n[first_index+1:][::-1]
+        res = int(''.join(list(map(str, n))))
+        if res > 2 ** 31:
+            return -1
+        return res
+        
+        
