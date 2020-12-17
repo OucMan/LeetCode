@@ -34,6 +34,8 @@ candidates 中的每个数字在每个组合中只能使用一次。
 
 回溯本质就是递归
 
+为了避免重复和剪枝，我们首先排序
+
 递归出口：组合元素总和等于目标值
 
 递归参数：当前组合元素，候选集合
@@ -51,12 +53,10 @@ class Solution(object):
         :rtype: List[List[int]]
         """
         res = []
-
+        candidates.sort()
         def back(can, item = []):
             if sum(item) == target:
-                item.sort()
-                if item not in res:
-                    res.append(item)
+                res.append(item)
                 return 
             for i in range(len(can)):
                 if i > 0 and can[i] == can[i-1]: # 剪枝，不然会超时
