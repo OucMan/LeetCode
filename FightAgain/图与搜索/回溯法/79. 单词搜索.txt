@@ -1,0 +1,83 @@
+# 题目
+
+给定一个二维网格和一个单词，找出该单词是否存在于网格中。
+
+单词必须按照字母顺序，通过相邻的单元格内的字母构成，其中“相邻”单元格是那些水平相邻或垂直相邻的单元格。同一个单元格内的字母不允许被重复使用。
+
+
+示例:
+
+board =
+[
+  ['A','B','C','E'],
+  ['S','F','C','S'],
+  ['A','D','E','E']
+]
+
+给定 word = "ABCCED", 返回 true
+给定 word = "SEE", 返回 true
+给定 word = "ABCB", 返回 false
+ 
+
+提示：
+
+board 和 word 中只包含大写和小写英文字母。
+1 <= board.length <= 200
+1 <= board[i].length <= 200
+1 <= word.length <= 10^3
+
+
+
+# 思路
+
+回溯
+
+以board中的每一个元素为起点，进行回溯，查看是够能够找到结果
+
+回溯的本质是递归
+
+递归的出口：需要判断的剩余的word为空时，首先之前的字母全部匹配，返回True，或者是行列超过边界，或者访问过已经访问的元素，或者是当前元素与board中的当前元素不相等，直接返回False
+
+递归的参数：一个记录已经访问过的元素的集合，board中需要判断的当前位置信息，剩余的单词，以及board的长和宽
+
+递归的逻辑：首先判断是否满足出口条件，然后对各个方向的元素进行处理，依次递归，注意对visited集合的回溯过程。
+
+
+# 代码
+
+class Solution(object):
+    def exist(self, board, word):
+        """
+        :type board: List[List[str]]
+        :type word: str
+        :rtype: bool
+        """
+
+        rows = len(board)
+        cols = len(board[0])
+        visited = [[False for i in range(cols)] for j in range(rows)]
+        dire = [[1,0], [-1,0], [0,1], [0,-1]]
+
+        def back(visited, row, col, word, rows, cols):
+            if not word:
+                return True
+            if not (0<=row<rows) or not (0<=col<cols) or word[0] != board[row][col] or visited[row][col]:
+                return False
+            for d in dire:
+                n_x, n_y = row + d[0], col + d[1]
+                visited[row][col] = True
+                if back(visited, n_x, n_y, word[1:], rows, cols):
+                    return True
+                else:
+                    visited[row][col] = False
+            return False
+        
+        for i in range(rows):
+            for j in range(cols):
+                if back(visited, i, j, word, rows, cols):
+                    return True
+        
+        return False
+                
+
+                
