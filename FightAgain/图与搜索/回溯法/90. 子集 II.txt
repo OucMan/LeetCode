@@ -1,0 +1,61 @@
+# 题目
+
+给定一个可能包含重复元素的整数数组 nums，返回该数组所有可能的子集（幂集）。
+
+说明：解集不能包含重复的子集。
+
+示例:
+
+输入: [1,2,2]
+输出:
+[
+  [2],
+  [1],
+  [1,2,2],
+  [2,2],
+  [1,2],
+  []
+]
+
+# 思路
+
+先排序，后回溯
+
+回溯本质上就是递归
+
+递归的出口：如果当前子集没有出现过，那么直接添加进结果集合即可，注意不要return
+
+递归的参数：当前子集和后续元素的候选集合
+
+递归的逻辑：首先判断出口条件是否满足，然后将候选集合中的元素依次添加进子集中，接着递归，这里我们通过比较相邻元素的大小来进行剪枝。
+
+
+# 代码
+
+class Solution(object):
+    def subsetsWithDup(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: List[List[int]]
+        """
+
+        nums.sort()
+        self.res = []
+
+
+        def back(item, can):
+            if item not in self.res:
+                self.res.append(item)
+            
+            for i in range(len(can)):
+                if i > 0 and can[i] == can[i-1]:
+                    continue
+                tmp = can[i+1:]
+                back(item+[can[i]], tmp)
+        
+        back([], nums)
+        
+        return self.res
+        
+        
+        
