@@ -1,0 +1,62 @@
+# 题目
+
+给定一个含有数字和运算符的字符串，为表达式添加括号，改变其运算优先级以求出不同的结果。你需要给出所有可能的组合的结果。有效的运算符号包含 +, - 以及 * 。
+
+示例 1:
+
+输入: "2-1-1"
+输出: [0, 2]
+解释: 
+((2-1)-1) = 0 
+(2-(1-1)) = 2
+示例 2:
+
+输入: "2*3-4*5"
+输出: [-34, -14, -10, -10, 10]
+解释: 
+(2*(3-(4*5))) = -34 
+((2*3)-(4*5)) = -14 
+((2*(3-4))*5) = -10 
+(2*((3-4)*5)) = -10 
+(((2*3)-4)*5) = 10
+
+
+# 思路
+
+递归
+
+我们遍历这个表达式，如果碰到运算符，那么原始的表达式就可以分为由该运算符分割的左右子表达式，对左右子表达式递归调用函数，根据两个子表达式得到的结果来合并出原表达式的结果。
+
+递归的出口：表达式都是数字，直接返回
+
+大致的思路为将原表达式拆分成左右两个子表达式，根据子表达式的结果合并出原表达式的结果
+
+
+
+# 代码
+
+class Solution(object):
+    def diffWaysToCompute(self, input):
+        """
+        :type input: str
+        :rtype: List[int]
+        """
+        if input.isdigit():
+            return [int(input)]
+        res = []
+        for i in range(len(input)):
+            if input[i] in '+-*':
+                left = self.diffWaysToCompute(input[:i])
+                right = self.diffWaysToCompute(input[i+1:])
+                for l in left:
+                    for r in right:
+                        if input[i] == '+':
+                            res.append(l+r)
+                        elif input[i] == '-':
+                            res.append(l-r)
+                        else:
+                            res.append(l*r)
+        
+        return res
+
+
