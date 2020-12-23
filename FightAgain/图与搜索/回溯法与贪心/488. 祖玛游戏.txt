@@ -1,0 +1,97 @@
+# 题目
+
+回忆一下祖玛游戏。现在桌上有一串球，颜色有红色(R)，黄色(Y)，蓝色(B)，绿色(G)，还有白色(W)。 现在你手里也有几个球。
+
+每一次，你可以从手里的球选一个，然后把这个球插入到一串球中的某个位置上（包括最左端，最右端）。接着，如果有出现三个或者三个以上颜色相同的球相连的话，就把它们移除掉。重复这一步骤直到桌上所有的球都被移除。
+
+找到插入并可以移除掉桌上所有球所需的最少的球数。如果不能移除桌上所有的球，输出 -1 。
+
+ 
+
+示例 1：
+
+输入：board = "WRRBBW", hand = "RB"
+输出：-1
+解释：WRRBBW -> WRR[R]BBW -> WBBW -> WBB[B]W -> WW
+示例 2：
+
+输入：board = "WWRRBBWW", hand = "WRBRW"
+输出：2
+解释：WWRRBBWW -> WWRR[R]BBWW -> WWBBWW -> WWBB[B]WW -> WWWW -> empty
+示例 3：
+
+输入：board = "G", hand = "GGGGG"
+输出：2
+解释：G -> G[G] -> GG[G] -> empty 
+示例 4：
+
+输入：board = "RBYYBBRRB", hand = "YRBGB"
+输出：3
+解释：RBYYBBRRB -> RBYY[Y]BBRRB -> RBBBRRB -> RRRB -> B -> B[B] -> BB[B] -> empty 
+ 
+
+提示：
+
+你可以假设桌上一开始的球中，不会有三个及三个以上颜色相同且连着的球。
+1 <= board.length <= 16
+1 <= hand.length <= 5
+输入的两个字符串均为非空字符串，且只包含字符 'R','Y','B','G','W'。
+
+
+# 思路
+
+回溯
+
+我们使用字典c来记录手中球的颜色和个数，使用字典self.res保存从初始字符串到当前字符串经历的步数，最终的结果就是self.res['']，即原始字符串变为空经历的步数
+
+回溯本质就是递归
+
+
+递归的出口：待处理的字符串为空
+
+递归的参数：待处理字符串
+
+递归的逻辑：首先检测出口条件，然后依次遍历各种颜色的球，假如手中有颜色的球，首先c中球的数量减1，然后依次将其插入到待处理字符串的各个位置，并相应的得到化简后的新字符串，假如源字符串到达新字符串的步数大于源字符串到达待处理字符串的步数加1，说明更新源字符串到达新字符串的步数，并递归调用函数处理新字符串，处理完成后，记得将c中球的数量加1，完成回溯。
+
+
+# 代码
+
+from collections import Counter, defaultdict
+
+class Solution(object):
+    def findMinStep(self, board, hand):
+        """
+        :type board: str
+        :type hand: str
+        :rtype: int
+        """
+        self.res = defaultdict(lambda: 6)
+        c = Counter(hand)
+        self.res[board] = 0
+        def dfs(s):
+            if s == '':
+                return
+            for i in 'RYBGW':
+                if c[i] > 0:
+                    c[i] -= 1
+                    for j in range(len(s)+1):
+                        new = self.simple(s[:j] + i + s[j:])
+                        if self.res[new] > self.res[s] + 1:
+                            self.res[new] = self.res[s] + 1
+                            dfs(new)
+                    c[i] += 1
+        dfs(board)
+        return self.res[''] if self.res[''] < 6 else -1
+
+
+    def simple(self, s):
+        if len(s) < 3:
+            return s
+        for i in range(len(s)):
+            j = i
+            while j < len(s) and s[j] == s[i]:
+                j += 1
+            if j - i >= 3:
+                return self.simple(s[:i] + s[j:])
+        return s
+
