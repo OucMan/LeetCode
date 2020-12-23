@@ -1,0 +1,69 @@
+# 题目
+
+给定一个二维的矩阵，包含 'X' 和 'O'（字母 O）。
+
+找到所有被 'X' 围绕的区域，并将这些区域里所有的 'O' 用 'X' 填充。
+
+示例:
+
+X X X X
+X O O X
+X X O X
+X O X X
+运行你的函数后，矩阵变为：
+
+X X X X
+X X X X
+X X X X
+X O X X
+解释:
+
+被围绕的区间不会存在于边界上，换句话说，任何边界上的 'O' 都不会被填充为 'X'。 任何不在边界上，或不与边界上的 'O' 相连的 'O' 最终都会被填充为 'X'。如果两个元素在水平或垂直方向相邻，则称它们是“相连”的。
+
+
+# 思路
+
+广度优点遍历（递归）找到边界的O向内可以连起来的区域，使用‘#’标记起来，然后变量整个区域，假如还有‘O’，那就是与边界不相连的，即被X包围的，因此将其改为X，然后将#改为O，意味着这是与边界上的O连接的区域。
+
+
+
+
+# 代码
+
+class Solution(object):
+    def solve(self, board):
+        """
+        :type board: List[List[str]]
+        :rtype: None Do not return anything, modify board in-place instead.
+        """
+        if not board or not board[0]:
+            return
+            
+        self.diections = [[1,0],[-1,0],[0,1],[0,-1]]
+        rows = len(board)
+        cols = len(board[0])
+        
+        for i in range(rows):
+            self.helper(board, i, 0, rows, cols)
+            self.helper(board, i, cols-1, rows, cols)
+        
+        for i in range(cols):
+            self.helper(board, 0, i, rows, cols)
+            self.helper(board, rows-1, i, rows, cols)
+        
+        for i in range(rows):
+            for j in range(cols):
+                if board[i][j] == 'O':
+                    board[i][j] = 'X'
+                elif board[i][j] == '#':
+                    board[i][j] = 'O'
+    
+    def helper(self, board, x, y, rows, cols):
+        if not 0<=x<rows or not 0<=y<cols or board[x][y] != 'O':
+            return
+        board[x][y] = '#'
+        for d in self.diections:
+            n_x, n_y = x + d[0], y + d[1]
+            self.helper(board, n_x, n_y, rows, cols)
+    
+
