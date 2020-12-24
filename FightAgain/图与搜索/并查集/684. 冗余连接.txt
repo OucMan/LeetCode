@@ -50,6 +50,7 @@ def union(x, y):
     father_x, father_y = find(x), find(y)
     if father_x == father_y:
         self.res = [x, y]
+        return
     if size[father_x] > size[father_y]:
         father_x, father_y = father_y, father_x
     father[father_x] = father_y
@@ -81,6 +82,7 @@ class Solution(object):
             father_x, father_y = find(x), find(y)
             if father_x == father_y:
                 self.res = [x, y]
+                return
             if size[father_x] > size[father_y]:
                 father_x, father_y = father_y, father_x
             father[father_x] = father_y
