@@ -1,0 +1,74 @@
+# 题目
+
+验证给定的字符串是否可以解释为十进制数字。
+
+例如:
+
+"0" => true
+" 0.1 " => true
+"abc" => false
+"1 a" => false
+"2e10" => true
+" -90e3   " => true
+" 1e" => false
+"e3" => false
+" 6e-1" => true
+" 99e2.5 " => false
+"53.5e93" => true
+" --6 " => false
+"-+3" => false
+"95a54e53" => false
+
+说明: 我们有意将问题陈述地比较模糊。在实现代码之前，你应当事先思考所有可能的情况。这里给出一份可能存在于有效十进制数字中的字符列表：
+
+数字 0-9
+指数 - "e"
+正/负号 - "+"/"-"
+小数点 - "."
+当然，在输入中，这些字符的上下文也很重要。
+
+更新于 2015-02-10:
+C++函数的形式已经更新了。如果你仍然看见你的函数接收 const char * 类型的参数，请点击重载按钮重置你的代码。
+
+
+# 思路
+
+数字可以分为4部分，Flag + NumA + E + NumB，其中Falg为正负号，NumA不可以没有，可以是整数或者浮点数（存在小数点），E就是'e'，NumB是e后面的整数，当e不存在时，它也不存在，同时他可以为正数或者复数。
+
+总结，正负号可能出现两个位置，首位或者e后面的第一个元素；小数点只能出现一次，在NumA中；E只能出现一次，并且前面后面都得有数
+
+
+# 代码
+
+class Solution(object):
+    def isNumber(self, s):
+        """
+        :type s: str
+        :rtype: bool
+        """
+        s = s.strip()
+        if ' ' in s:
+            return False
+        n = len(s)
+        e_show, dot_show, num_show = False, False, False
+        for i in range(n):
+            c = s[i]
+            if c in '+-':
+                if i > 0 and s[i-1] != 'e':
+                    return False
+            elif c == '.':
+                if dot_show or e_show:
+                    return False
+                dot_show = True
+            elif c == 'e':
+                if e_show or not num_show:
+                    return False
+                e_show = True
+                num_show = False
+            elif c in '0123456789':
+                num_show = True
+            else:
+                return False
+        
+        return num_show
+
