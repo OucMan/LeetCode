@@ -38,6 +38,16 @@
 
 二分查找
 
+left, right = 0, end
+while left <= right:
+   mid = left + (right-left)//2
+   if mid == target:
+     return mid
+   elif mid > target:
+     right = mid - 1
+   else:
+     left = mid + 1
+return left
 
 # 代码
 
