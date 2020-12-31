@@ -1,0 +1,43 @@
+# 题目
+
+给定一个只包含整数的有序数组，每个元素都会出现两次，唯有一个数只会出现一次，找出这个数。
+
+示例 1:
+
+输入: [1,1,2,3,3,4,4,8,8]
+输出: 2
+示例 2:
+
+输入: [3,3,7,7,10,11,11]
+输出: 10
+注意: 您的方案应该在 O(log n)时间复杂度和 O(1)空间复杂度中运行。
+
+
+
+# 思路
+
+二分查找
+
+结果肯定处在偶数索引处，它前面的元素，偶=奇，如nums[0]==nums[1]，后面的元素奇等于偶，因此我们首先找到判断偶数与其前面的奇数索引对应的元素是否相等，根据情况来执行二分查找
+
+
+
+# 代码
+
+class Solution(object):
+    def singleNonDuplicate(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: int
+        """
+        l, r = 0, len(nums) - 1
+        while l < r:
+            mid = l + (r-l) // 2
+            if mid % 2 == 1:
+                mid -= 1
+            if nums[mid] == nums[mid+1]:
+                l = mid + 2
+            else:
+                r = mid
+        return nums[r]
+
