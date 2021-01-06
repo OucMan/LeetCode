@@ -47,6 +47,10 @@ dp[j] = min(dp[j-coins[i]]+1, dp[j])
 
 模板
 
+dp初始化
+dp = [float('inf')] * (amount+1)
+dp[0] = 0 # 金额为0，使用硬币数量为0
+
 遍历硬币：
   遍历金额（正序）：
     dp[j] = min(dp[j-coins[i]]+1, dp[j]) # 转化函数
