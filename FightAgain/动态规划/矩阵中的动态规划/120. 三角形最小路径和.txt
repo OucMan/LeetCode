@@ -1,0 +1,65 @@
+# 题目
+
+给定一个三角形 triangle ，找出自顶向下的最小路径和。
+
+每一步只能移动到下一行中相邻的结点上。
+
+相邻的结点 在这里指的是 下标 与 上一层结点下标 相同或者等于 上一层结点下标 + 1 的两个结点。
+
+ 
+
+示例 1：
+
+输入：triangle = [[2],[3,4],[6,5,7],[4,1,8,3]]
+输出：11
+解释：自顶向下的最小路径和为 11（即，2 + 3 + 5 + 1 = 11）。
+示例 2：
+
+输入：triangle = [[-10]]
+输出：-10
+ 
+
+提示：
+
+1 <= triangle.length <= 200
+triangle[0].length == 1
+triangle[i].length == triangle[i - 1].length + 1
+-104 <= triangle[i][j] <= 104
+ 
+
+进阶：
+
+你可以只使用 O(n) 的额外空间（n 为三角形的总行数）来解决这个问题吗？
+
+
+# 思路
+
+动态规划，dp为以为数组，只保存起点到达上一行所有元素的最短距离，tmp来记录到达当前行所有元素的最短距离，弄清楚索引，使用dp给tmp赋值
+
+
+
+# 代码
+
+class Solution(object):
+    def minimumTotal(self, triangle):
+        """
+        :type triangle: List[List[int]]
+        :rtype: int
+        """
+        dp = [triangle[0][0]]
+        n = len(triangle)
+
+        for i in range(1, n):
+            tmp = []
+            for j in range(i+1):
+                if j == 0:
+                    tmp.append(dp[0] + triangle[i][j])
+                elif j == i:
+                    tmp.append(dp[-1] + triangle[i][j])
+                else:
+                    tmp.append(min(dp[j-1], dp[j]) + triangle[i][j])
+            dp = tmp
+        
+        return min(dp)
+        
+        
