@@ -1,0 +1,57 @@
+# 题目
+
+
+
+# 思路
+
+动态规划
+
+dp[i][j]表示：s中长度为i的部分可以匹配上p中长度为j的部分。需要注意的是，“s中长度为i的部分”，指的是s[0]到s[i-1]，因为i、j是表示长度的，所以具体到哪一位需要 -1。
+
+初始化
+
+先全部初始化为false，然后让dp[0][0]为true（s和p都为空时必然是true）；
+当s为空，p满足一定条件（比如p = "a*b*c*"）时，让dp[0][i]为true；
+当s不为空，p为空时，必然为false。此情况不必再处理，因为一开始就初始化了整个dp为false了；
+当s不为空，p也不为空时，需要开始执行动态规划过程。
+
+s和p都从1开始遍历（因为它们为0的情况都已经处理过了）。p中长度为j的元素（即p[j-1]）只有可能会是：正常字符、'.' 或 '*'。此时开始分情况讨论：
+
+如果p[j-1]是正常字符且等于s[i-1]，或者p[j-1]是'.'，判断dp[i][j]需要看的是它们前面的全部是否为true，即dp[i][j] = dp[i - 1][j - 1]。
+如果p[j-1]是'*'，那么我们需要根据p[j-2]的值来分情况讨论，因为'*'的作用是让其前一位字符（即p[i-2]）出现任意次（0次、1次或多次）：
+   匹配0次时，dp[i][j] = dp[i][j - 2]。
+   匹配1次时，dp[i][j] = dp[i][j - 1]。
+   匹配多次时，dp[i][j] = dp[i - 1][j]。
+
+最后返回结果dp[-1][-1]
+
+大神：https://leetcode-cn.com/problems/regular-expression-matching/solution/zi-jie-ti-ku-10-kun-nan-zheng-ze-biao-da-shi-pi-pe/
+
+
+# 代码
+class Solution(object):
+    def isMatch(self, s, p):
+        """
+        :type s: str
+        :type p: str
+        :rtype: bool
+        """
+        m, n = len(s) + 1, len(p) + 1
+        dp = [[False] * n for _ in range(m)]
+        dp[0][0] = True
+        for i in range(1, n):
+            if i >= 2 and p[i-1] == '*' and dp[0][i-2]:
+                dp[0][i] = True
+        for i in range(1, m):
+            for j in range(1, n):
+                if s[i-1] == p[j-1] or p[j-1] == '.':
+                    dp[i][j] = dp[i-1][j-1]
+                elif p[j-1] == '*' and j >= 2:
+                    if p[j-2] != s[i-1] and p[j-2] != '.':
+                        dp[i][j] = dp[i][j-2]
+                    else:
+                        dp[i][j] = dp[i][j-2] or dp[i][j-1] or dp[i-1][j]
+        return dp[-1][-1]
+        
+        
+        
