@@ -1,0 +1,54 @@
+# 题目
+
+给定一个字符串 s，将 s 分割成一些子串，使每个子串都是回文串。
+
+返回 s 所有可能的分割方案。
+
+示例:
+
+输入: "aab"
+输出:
+[
+  ["aa","b"],
+  ["a","a","b"]
+]
+
+# 思路
+
+动态规划+回溯
+
+dp[j][i]表示字符串s[j:i+1]是否为回文子串，首先为dp赋值
+
+接着回溯，回溯的本质是递归
+
+递归的出口，就是当子串的开头索引大于串最后一个字符的索引时，也就是表示字符串已经处理完毕；
+递归的参数，子串的开头索引，和当前回文子串组成的列表
+递归的逻辑，首先判断出口是否满足，然后从开头索引向后遍历字符串，假如前半段字符串为回文串，那么递归判断后半段。
+
+
+# 代码
+
+class Solution(object):
+    def partition(self, s):
+        """
+        :type s: str
+        :rtype: List[List[str]]
+        """
+        n = len(s)
+        dp = [[False] * n for _ in range(n)]
+        for i in range(n):
+            for j in range(i+1):
+                if s[i] == s[j] and (i - j <= 2 or dp[j+1][i-1]):
+                    dp[j][i] = True
+        res= []
+        def helper(i, tmp):
+            if i == n:
+                res.append(tmp)
+            for j in range(i, n):
+                if dp[i][j]:
+                    helper(j+1, tmp + [s[i:j+1]])
+
+        helper(0, [])
+        return res
+        
+        
