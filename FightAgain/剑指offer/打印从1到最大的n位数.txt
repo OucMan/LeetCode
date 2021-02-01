@@ -1,0 +1,47 @@
+# 题目
+
+输入数字 n，按顺序打印出从 1 到最大的 n 位十进制数。比如输入 3，则打印出 1、2、3 一直到最大的 3 位数 999。
+
+示例 1:
+
+输入: n = 1
+输出: [1,2,3,4,5,6,7,8,9]
+ 
+
+说明：
+
+用返回一个整数列表来代替打印
+n 为正整数
+
+
+# 思路
+
+大数问题
+
+python 可以直接range(1, 10**n)
+
+但是大数问题，通用解法为使用递归实现全排列，使用字符串表示大数
+
+
+# 代码
+
+class Solution(object):
+    def printNumbers(self, n):
+        """
+        :type n: int
+        :rtype: List[int]
+        """
+        nums = ['0'] * n
+        res = []
+
+        def dfs(x):
+            if x == n:
+                res.append(int(''.join(nums)))
+                return
+            for i in range(10):
+                nums[x] = str(i)
+                dfs(x + 1)
+        
+        dfs(0)
+        return res[1:]
+
