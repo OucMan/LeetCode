@@ -1,0 +1,45 @@
+# 题目
+
+请实现一个函数用来判断字符串是否表示数值（包括整数和小数）。例如，字符串"+100"、"5e2"、"-123"、"3.1416"、"-1E-16"、"0123"都表示数值，但"12e"、"1a3.14"、"1.2.3"、"+-5"及"12e+5.4"都不是。
+
+
+# 思路
+
+数字可以分为4部分，Flag + NumA + E + NumB，其中Falg为正负号，NumA不可以没有，可以是整数或者浮点数（存在小数点），E就是'e'，NumB是e后面的整数，当e不存在时，它也不存在，同时他可以为正数或者复数。
+
+总结，正负号可能出现两个位置，首位或者e后面的第一个元素；小数点只能出现一次，在NumA中；E只能出现一次，并且前面后面都得有数
+
+
+# 代码
+
+class Solution(object):
+    def isNumber(self, s):
+        """
+        :type s: str
+        :rtype: bool
+        """
+        s = s.strip()
+        if ' ' in s:
+            return False
+        n = len(s)
+        e_show, dot_show, num_show = False, False, False
+        for i in range(n):
+            c = s[i]
+            if c in '+-':
+                if i > 0 and s[i-1] != 'e':
+                    return False
+            elif c == '.':
+                if dot_show or e_show:
+                    return False
+                dot_show = True
+            elif c == 'e':
+                if e_show or not num_show:
+                    return False
+                e_show = True
+                num_show = False
+            elif c in '0123456789':
+                num_show = True
+            else:
+                return False
+        
+        return num_show
