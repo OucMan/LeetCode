@@ -1,0 +1,35 @@
+# 题目
+
+
+# 思路
+
+采用字典的方式很简单
+
+下面采用原地置换
+
+https://leetcode-cn.com/problems/shu-zu-zhong-zhong-fu-de-shu-zi-lcof/solution/mian-shi-ti-03-shu-zu-zhong-zhong-fu-de-shu-zi-yua/
+
+
+# 代码
+
+class Solution(object):
+    def findRepeatNumber(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: int
+        """
+        n = len(nums)
+        i = 0
+        while i < n:
+            if nums[i] == i:
+                i += 1
+                continue
+            if nums[i] == nums[nums[i]]:
+                return nums[i]
+            a = nums[i]
+            b = nums[a]
+            nums[a] = a
+            nums[i] = b
+    
+
+
