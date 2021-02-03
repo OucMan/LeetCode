@@ -1,0 +1,38 @@
+# 题目
+
+输入一个字符串，打印出该字符串中字符的所有排列。
+
+ 
+
+你可以以任意顺序返回这个字符串数组，但里面不能有重复元素。
+
+ 
+
+示例:
+
+输入：s = "abc"
+输出：["abc","acb","bac","bca","cab","cba"]
+
+
+
+# 思路
+
+
+# 代码
+
+class Solution(object):
+    def permutation(self, s):
+        """
+        :type s: str
+        :rtype: List[str]
+        """
+        if not s:
+            return []
+        if len(s) == 1:
+            return [s]
+        res = set()
+        for i in range(len(s)):
+            for j in self.permutation(s[:i] + s[i+1:]):
+                res.add(s[i] + j)
+        return list(res)
+
