@@ -17,6 +17,12 @@
 
 # 思路
 
+普通递归
+
+或者
+
+回溯
+
 
 # 代码
 
@@ -36,3 +42,32 @@ class Solution(object):
                 res.add(s[i] + j)
         return list(res)
 
+
+class Solution(object):
+    def permutation(self, s):
+        """
+        :type s: str
+        :rtype: List[str]
+        """
+        if not s:
+            return []
+        if len(s) == 1:
+            return [s]
+        s = sorted(s)
+        res = []
+        n = len(s)
+
+        def helper(tmp, can):
+            if len(tmp)== n:
+                res.append(tmp)
+                return
+            for i in range(len(can)):
+                if i > 0 and can[i] == can[i-1]:
+                    continue
+                can2 = can[:i] + can[i+1:]
+                helper(tmp + can[i], can2)
+        
+        helper('', s)
+
+        return res
+        
