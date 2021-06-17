@@ -1,0 +1,10 @@
+
+left, right = 0, 0
+
+while right < len(nums):
+    windows.append(nums[right])
+    if len(windows) == thres:
+        windows.pop(0)
+        left += 1
+    right += 1
+    
